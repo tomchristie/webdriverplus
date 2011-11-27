@@ -10,6 +10,8 @@ Currently a work in progress, release soon...
 Requirements
 ------------
 
+Requires selenium.
+
 ``pip install selenium``
 
 Tests
