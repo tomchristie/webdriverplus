@@ -10,7 +10,7 @@ Currently a work in progress, release soon...
 Requirements
 ------------
 
-Requires selenium.
+Requires the ``selenium`` python package.
 
 ``pip install selenium``
 
