@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import unittest2 as unittest
 import webdriverplus
 
