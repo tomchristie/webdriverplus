@@ -6,6 +6,10 @@ import tempfile
 
 
 class WebDriver(SelectorMixin):
+    @property
+    def _xpath_prefix(self):
+        return '//*'
+
     # Override the default behavior to return our own WebElement and
     # WebElements objects.
     def _is_web_element(self, value):

@@ -15,32 +15,44 @@ def xpath_literal(s):
 class SelectorMixin(object):
     _ARG_TO_SELECTOR = {
         'id':
-            lambda val: (By.ID, val),
+            lambda self, val: (By.ID, val),
         'xpath':
-            lambda val: (By.XPATH, val),
+            lambda self, val: (By.XPATH, val),
         'name':
-            lambda val: (By.NAME, val),
+            lambda self, val: (By.NAME, val),
         'tag_name':
-            lambda val: (By.TAG_NAME, val),
+            lambda self, val: (By.TAG_NAME, val),
         'class_name':
-            lambda val: (By.CLASS_NAME, val),
+            lambda self, val: (By.CLASS_NAME, val),
         'css':
-            lambda val: (By.CSS_SELECTOR, val),
+            lambda self, val: (By.CSS_SELECTOR, val),
         'link':
-            lambda val: (By.LINK_TEXT, val),
+            lambda self, val: (By.LINK_TEXT, val),
         'link_contains':
-            lambda val: (By.PARTIAL_LINK_TEXT, val),
+            lambda self, val: (By.PARTIAL_LINK_TEXT, val),
         'attribute':
-            lambda val: (By.XPATH, '//*[@%s]' % val),
+            lambda self, val: (By.XPATH, '//*[@%s]' % val),
         'attribute_value':
-            lambda val: (By.XPATH,
-                         '//*[@%s=%s]' % (val[0], xpath_literal(val[1]))),
+            lambda self, val: (By.XPATH,
+                         '%s[@%s=%s]' % (self._xpath_prefix, val[0], xpath_literal(val[1]))),
         'text':
-            lambda val: (By.XPATH,
-                         '//*[text()=%s]' % xpath_literal(val)),
+            lambda self, val: (By.XPATH,
+                         '%s[text()=%s]' % (self._xpath_prefix, xpath_literal(val))),
         'text_contains':
-            lambda val: (By.XPATH,
-                         '//*[contains(text(),%s)]' % xpath_literal(val)),
+            lambda self, val: (By.XPATH,
+                         '%s[contains(text(),%s)]' % (self._xpath_prefix, xpath_literal(val))),
+        'value':
+            lambda self, val: (By.XPATH,
+                         '%s[@value=%s]' % (self._xpath_prefix, xpath_literal(val))),
+        'type':
+            lambda self, val: (By.XPATH,
+                         '%s[@type=%s]' % (self._xpath_prefix, xpath_literal(val))),
+        'checked':
+            lambda self, val: (By.XPATH,
+                         self._xpath_prefix + ('[@checked]' if val else '[not(@checked)]')),
+        'selected':
+            lambda self, val: (By.XPATH,
+                         self._xpath_prefix + ('[@selected]' if val else '[not(@selected)]')),
         # TODO: label, label_contains
     }
 
@@ -52,7 +64,7 @@ class SelectorMixin(object):
         arg, value = kwargs.items()[0]
         func = self._ARG_TO_SELECTOR.get(arg, None)
         assert func, "'%s' is not a valid selector argument." % arg
-        selector, value = func(value)
+        selector, value = func(self, value)
 
         return (selector, value)
 

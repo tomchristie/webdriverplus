@@ -23,6 +23,8 @@ def tearDownModule():
 
 # drag & drop
 
+# find_all().find() is broken
+# No such element exceptions need to be cleaner
 
 class DriverTests(unittest.TestCase):
     def setUp(self):
@@ -69,7 +71,7 @@ class SelectorTests(unittest.TestCase):
                              <label for="password">Password:</label>
                              <input type="password" name="password" />
                          </form>
-                         <form>
+                         <form id="checkboxlist">
                              <input type="checkbox" value="red" />
                              <input type="checkbox" value="green" />
                              <input type="checkbox" value="blue" checked=yes />
@@ -139,6 +141,21 @@ class SelectorTests(unittest.TestCase):
     def test_attribute_value(self):
         node = self.driver.find(attribute_value=('checked', 'yes'))
         self.assertEquals(node.value, 'blue')
+
+    def test_value(self):
+        node = self.driver.find(value='blue')
+        self.assertEquals(node.tag_name, 'input')
+        self.assertEquals(node.type, 'checkbox')
+        self.assertEquals(node.value, 'blue')
+
+    def test_type(self):
+        node = self.driver.find(type='checkbox')
+        self.assertEquals(node.value, 'red')
+
+    def test_checked(self):
+        elem = self.driver.find(id='checkboxlist')
+        self.assertEquals(len(elem.find_all(checked=True)), 1)
+        self.assertEquals(len(elem.find_all(checked=False)), 2)
 
     # TODO: checked=True, checked=False, selected=True, selected=False
 
@@ -317,6 +334,41 @@ class InspectionTests(unittest.TestCase):
         del elem.attributes['src']
         self.assertEquals(elem.attributes,
                           {'width': '100px', 'height': '50px'})
+
+
+class FormInspectionTests(unittest.TestCase):
+    def setUp(self):
+        super(FormInspectionTests, self).setUp()
+        self.driver = driver
+        snippet = """<html>
+                         <form>
+                             <select>
+                                 <option selected>Walk</option>
+                                 <option>Cycle</option>
+                                 <option>Drive</option>
+                             </select>
+                             <fieldset>
+                                 <input type="checkbox" value="peanuts" />
+                                 I like peanuts
+                             </fieldset>
+                             <fieldset>
+                                 <input type="checkbox" value="jam" checked />
+                                 I like jam
+                             </fieldset>
+                         </form>
+                     </html>"""
+        self.driver.open(snippet)
+
+    def test_is_selected(self):
+        elem = self.driver.find('form')
+        self.assertEquals(elem.find(text='Walk').is_selected, True)
+        self.assertEquals(elem.find(text='Cycle').is_selected, False)
+        self.assertEquals(elem.find(text='Drive').is_selected, False)
+
+    def test_is_checked(self):
+        elem = self.driver.find('form')
+        self.assertEquals(elem.find(value='peanuts').is_checked, False)
+        self.assertEquals(elem.find(value='jam').is_checked, True)
 
 
 class ValueTests(unittest.TestCase):

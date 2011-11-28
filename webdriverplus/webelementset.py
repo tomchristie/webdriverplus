@@ -20,7 +20,7 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def find_all(self, css=None, **kwargs):
         ret = WebElementSet(self._webdriver)
         for elem in self:
-            ret |= elem._find_all(css, **kwargs)
+            ret |= elem.find_all(css, **kwargs)
         return ret
 
     def filter(self, css=None, **kwargs):

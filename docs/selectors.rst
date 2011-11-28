@@ -18,6 +18,10 @@ Selectors
     driver.find(text_contains=('Welcome'))
     driver.find(attribute='checked')
     driver.find(attribute_value=('checked', 'true'))
+    driver.find(value='foobar')
+    driver.find(type='checkbox')
+    driver.find('input', type='checkbox', checked=True)
+    driver.find('option', selected=False)
 
 id
 --

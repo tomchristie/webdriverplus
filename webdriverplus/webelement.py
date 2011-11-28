@@ -1,9 +1,13 @@
 from selenium.webdriver.remote.webelement import WebElement as _WebElement
 from webdriverplus.selectors import SelectorMixin
-from webdriverplus.wrappers import Style, Attributes, Size
+from webdriverplus.wrappers import Style, Attributes, Size, Location
 
 
 class WebElement(SelectorMixin, _WebElement):
+    @property
+    def _xpath_prefix(self):
+        return './/*'
+
     # Traversal
     @property
     def parent(self):
@@ -47,8 +51,20 @@ class WebElement(SelectorMixin, _WebElement):
 
     # Inspection & Manipulation
     @property
+    def type(self):
+        return self.get_attribute('type')
+
+    @property
     def value(self):
         return self.get_attribute('value')
+
+    @property
+    def is_checked(self):
+        return self.get_attribute('checked') is not None
+
+    @property
+    def is_selected(self):
+        return self.get_attribute('selected') is not None
 
     @property
     def inner_html(self):
@@ -79,8 +95,8 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def location(self):
-        val = super(WebElement, self).size
-        return Size(val['width'], val['height'])
+        val = super(WebElement, self).location
+        return Location(val['x'], val['y'])
 
     @property
     def attributes(self):

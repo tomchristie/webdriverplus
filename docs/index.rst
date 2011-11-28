@@ -30,6 +30,10 @@ Eg. ``elem.children``, ``elem.next``, ``elem.siblings``...
 
 ``elem.html``, ``elem.inner_html``
 
+**Actions**
+
+hover, drag_and_drop
+
 .. toctree::
   :maxdepth: 1
 
@@ -57,5 +61,7 @@ Eg. ``elem.children``, ``elem.next``, ``elem.siblings``...
 
 chaining ?
 
+with webdriverplus.Firefox() as driver:
+  pass
 
 **SELECTORS: label_text, label_text_contains, selected=True/False, checked=True/False**
