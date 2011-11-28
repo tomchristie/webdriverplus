@@ -17,12 +17,26 @@ children
     ...         <li>3</li>
     ...     </ul>
     ... </html>"""
-    >>> driver.open(snippet).find('ul').children
+    >>> driver.open(snippet).find('ul').children.html
     ['<li>1</li>', '<li><strong>2</strong></li>', '<li>3</li>']
 
 
 parent
 ------
+
+.. code-block:: python
+
+    >>> import webdriverplus
+    >>> driver = webdriverplus.Firefox()
+    >>> snippet = """<html>
+    ...     <ul>
+    ...         <li>1</li>
+    ...         <li><strong>2</strong></li>
+    ...         <li>3</li>
+    ...     </ul>
+    ... </html>"""
+    >>> driver.open(snippet).find('strong').parent
+    '<li><strong>2</strong></li>'
 
 descendants
 -----------
@@ -43,6 +57,20 @@ descendants
 
 ancestors
 ---------
+
+.. code-block:: python
+
+    >>> import webdriverplus
+    >>> driver = webdriverplus.Firefox()
+    >>> snippet = """<html>
+    ...     <ul>
+    ...         <li>1</li>
+    ...         <li class="selected">2</li>
+    ...         <li>3</li>
+    ...     </ul>
+    ... </html>"""
+    >>> driver.open(snippet).find('.selected').ancestors
+    WebElementSet(<html>, <body>, <ul>)
 
 next
 ----

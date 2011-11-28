@@ -18,7 +18,7 @@ class WebDriver(SelectorMixin):
         return WebElement(self, element_id)
 
     def _create_web_elements(self, elements):
-        return WebElementSet(elements)
+        return WebElementSet(self, elements)
 
     def _unwrap_value(self, value):
         if self._is_web_element(value):

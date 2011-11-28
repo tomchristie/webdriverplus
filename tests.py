@@ -171,6 +171,10 @@ class TreeTraversalTests(unittest.TestCase):
         self.assertEquals(nodes.tag_names,
                           ['li', 'li', 'li', 'li', 'li', 'strong'])
 
+    def test_ancestors(self):
+        nodes = self.driver.find(class_name='selected').ancestors
+        self.assertEquals(nodes.tag_names, ['html', 'body', 'ul'])
+
     def test_next(self):
         node = self.driver.find('.selected').next
         self.assertEquals(node.text, '4')
@@ -190,6 +194,30 @@ class TreeTraversalTests(unittest.TestCase):
     def test_siblings(self):
         nodes = self.driver.find('.selected').siblings
         self.assertEquals(nodes.text, ['1', '2', '4', '5'])
+
+
+class FilteringTests(unittest.TestCase):
+    def setUp(self):
+        super(FilteringTests, self).setUp()
+        self.driver = driver
+        snippet = """<html>
+                         <ul>
+                             <li>1</li>
+                             <li>2</li>
+                             <li class="selected">3</li>
+                             <li>4</li>
+                             <li class="selected">5</li>
+                         </ul>
+                     </html>"""
+        self.driver.open(snippet)
+
+    def test_filter(self):
+        nodes = self.driver.find_all('li').filter('.selected')
+        self.assertEquals(nodes.text, ['3', '5'])
+
+    def test_exclude(self):
+        nodes = self.driver.find_all('li').exclude('.selected')
+        self.assertEquals(nodes.text, ['1', '2', '4'])
 
 
 class ShortcutTests(unittest.TestCase):

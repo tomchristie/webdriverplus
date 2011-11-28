@@ -13,7 +13,7 @@ def xpath_literal(s):
 
 
 class SelectorMixin(object):
-    ARG_TO_SELECTOR = {
+    _ARG_TO_SELECTOR = {
         'id':
             lambda val: (By.ID, val),
         'xpath':
@@ -44,6 +44,18 @@ class SelectorMixin(object):
         # TODO: label, label_contains
     }
 
+    def _get_selector(self, css=None, **kwargs):
+        if css:
+            kwargs['css'] = css
+        assert len(kwargs) == 1, 'no selector argument supplied.'
+
+        arg, value = kwargs.items()[0]
+        func = self._ARG_TO_SELECTOR.get(arg, None)
+        assert func, "'%s' is not a valid selector argument." % arg
+        selector, value = func(value)
+
+        return (selector, value)
+
     def find(self, css=None, **kwargs):
         (selector, value) = self._get_selector(css, **kwargs)
         return self.find_element(by=selector, value=value)
@@ -51,16 +63,3 @@ class SelectorMixin(object):
     def find_all(self, css=None, **kwargs):
         (selector, value) = self._get_selector(css, **kwargs)
         return self.find_elements(by=selector, value=value)
-
-    def _get_selector(self, css=None, **kwargs):
-        if css:
-            kwargs['css'] = css
-        assert len(kwargs) == 1, 'no selector argument supplied.'
-
-        arg, value = kwargs.items()[0]
-        func = self.ARG_TO_SELECTOR.get(arg, None)
-        assert func, "'%s' is not a valid selector argument." % arg
-        selector, value = func(value)
-
-        return (selector, value)
-

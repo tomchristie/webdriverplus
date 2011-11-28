@@ -33,10 +33,11 @@ Eg. ``elem.children``, ``elem.next``, ``elem.siblings``...
 .. toctree::
   :maxdepth: 1
 
-  forms
   selectors
-  traversing
   actions
+  forms
+  traversing
+  filtering
   inspection
 
 **Inspection**

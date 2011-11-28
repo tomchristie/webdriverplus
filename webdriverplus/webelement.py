@@ -22,6 +22,10 @@ class WebElement(SelectorMixin, _WebElement):
         return self.find_all(xpath='./descendant::*')
 
     @property
+    def ancestors(self):
+        return self.find_all(xpath='./ancestor::*')
+
+    @property
     def next(self):
         return self.find(xpath='./following-sibling::*[1]')
 
