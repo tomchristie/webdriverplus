@@ -35,6 +35,19 @@ class WebDriver(SelectorMixin):
         else:
             return value
 
+    def _wrap_value(self, value):
+        if isinstance(value, dict):
+            converted = {}
+            for key, val in value.items():
+                converted[key] = self._wrap_value(val)
+            return converted
+        elif isinstance(value, WebElement):
+            return {'ELEMENT': value._id}  # Use '._id', not '.id'
+        elif isinstance(value, list):
+            return list(self._wrap_value(item) for item in value)
+        else:
+            return value
+
     # Override get to return self
     def get(self, url):
         super(WebDriver, self).get(url)

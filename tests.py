@@ -124,15 +124,15 @@ class SelectorTests(unittest.TestCase):
         self.assertEquals(self.driver.find(text_contains='tw').index, 1)
         self.assertEquals(self.driver.find(text_contains='hre').index, 2)
 
-    # def test_label(self):
-    #     node = self.driver.find(label='Password:')
-    #     expected = '<input type="password" name="password" />'
-    #     self.assertEquals(node.html, expected)
+    #def test_label(self):
+    #    node = self.driver.find(label='Password:')
+    #    expected = '<input type="password" name="password" />'
+    #    self.assertEquals(node.html, expected)
 
-    # def test_label_contains(self):
-    #     node = self.driver.find(label_contains='Password')
-    #     expected = '<input type="password" name="password" />'
-    #     self.assertEquals(node.html, expected)
+    #def test_label_contains(self):
+    #    node = self.driver.find(label_contains='Password')
+    #    expected = '<input type="password" name="password" />'
+    #    self.assertEquals(node.html, expected)
 
     def test_attribute(self):
         node = self.driver.find(attribute='checked')

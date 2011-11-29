@@ -41,6 +41,12 @@ class SelectorMixin(object):
         'text_contains':
             lambda self, val: (By.XPATH,
                          '%s[contains(text(),%s)]' % (self._xpath_prefix, xpath_literal(val))),
+        #'label':
+        #    lambda self, val: (By.XPATH,
+        #                 '//*[@id=//label[text()=%s]/@for]' % xpath_literal(val)),
+        #'label_contains':
+        #    lambda self, val: (By.XPATH,
+        #                 '//*[@id=//label[contains(text(),%s)]/@for]' % xpath_literal(val)),
         'value':
             lambda self, val: (By.XPATH,
                          '%s[@value=%s]' % (self._xpath_prefix, xpath_literal(val))),

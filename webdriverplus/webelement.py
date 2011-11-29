@@ -51,6 +51,10 @@ class WebElement(SelectorMixin, _WebElement):
 
     # Inspection & Manipulation
     @property
+    def id(self):
+        return self.get_attribute('id')
+
+    @property
     def type(self):
         return self.get_attribute('type')
 
@@ -64,7 +68,15 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def is_selected(self):
-        return self.get_attribute('selected') is not None
+        return super(WebElement, self).is_selected()
+
+    @property
+    def is_displayed(self):
+        return super(WebElement, self).is_selected()
+
+    @property
+    def is_enabled(self):
+        return super(WebElement, self).is_selected()
 
     @property
     def inner_html(self):

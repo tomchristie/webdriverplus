@@ -53,3 +53,14 @@ attribute
 attribute_value
 ---------------
 
+value
+-----
+
+type
+----
+
+checked
+-------
+
+selected
+--------
