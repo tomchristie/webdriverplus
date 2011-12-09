@@ -14,12 +14,12 @@ Requires the ``selenium`` python package.
 
 ``pip install selenium``
 
-Tests
------
+Run the Tests
+-------------
 
-``python ./runtests.py``
+``./runtests.py``
 
-Docs
-----
+Build the Docs
+--------------
 
-``sphinx-build -c docs -b html -d docs/build docs html``
+``./makedocs.sh``
