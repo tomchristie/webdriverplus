@@ -23,44 +23,56 @@ Selectors
     driver.find('input', type='checkbox', checked=True)
     driver.find('option', selected=False)
 
-id
---
-
-css
----
-
-name
-----
-
-tag_name
---------
-
-class_name
-----------
-
-xpath
------
-
-text
-----
-
-text_contains
--------------
-
-attribute
----------
-
-attribute_value
+id = *<string>*
 ---------------
 
-value
------
+css = *<string>*
+----------------
 
-type
-----
+name = *<string>*
+-----------------
 
-checked
--------
+tag_name = *<string>*
+---------------------
 
-selected
---------
+class_name = *<string>*
+-----------------------
+
+xpath = *<string>*
+------------------
+
+text = *<string>*
+-----------------
+
+text_contains = *<string>*
+--------------------------
+
+link_text = *<string>*
+----------------------
+
+link_text_contains = *<string>*
+-------------------------------
+
+label_text = *<string>*
+-----------------------
+
+label_text_contains = *<string>*
+--------------------------------
+
+attribute = *<string>*
+----------------------
+
+attribute_value = *<tuple of (string, string)>*
+-----------------------------------------------
+
+value = *<string>*
+------------------
+
+type = *<string>*
+-----------------
+
+checked = *<bool>*
+------------------
+
+selected = *<bool>*
+-------------------

@@ -5,7 +5,7 @@ from webdriverplus.selectors import SelectorMixin
 import tempfile
 
 
-class WebDriver(SelectorMixin):
+class WebDriverMixin(SelectorMixin):
     @property
     def _xpath_prefix(self):
         return '//*'
@@ -50,12 +50,14 @@ class WebDriver(SelectorMixin):
 
     # Override get to return self
     def get(self, url):
-        super(WebDriver, self).get(url)
+        super(WebDriverMixin, self).get(url)
         return self
 
     # Add some useful shortcuts.
     def open(self, content):
-        """Shortcut to open from text."""
+        """
+        Shortcut to open from text.
+        """
         with tempfile.NamedTemporaryFile() as temp:
             temp.write(content)
             temp.flush()
@@ -63,4 +65,10 @@ class WebDriver(SelectorMixin):
 
     @property
     def page_text(self):
+        """
+        Returns the full page text.
+        """
         return self.find(tag_name='body').text
+
+    def __repr__(self):
+        return 'WebDriver (%s) - %s' % (self.name, self.current_url)

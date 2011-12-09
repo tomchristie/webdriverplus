@@ -6,62 +6,53 @@
 WebDriver Plus
 ==============
 
-WedDriver Plus is a Python wrapper for Selenium WebDriver, that supports a
-richer, more expressive API.
+WedDriver Plus is an extension to the Python wrapper for Selenium WebDriver.
+
+It gives you a concise and expressive API, which lets you quickly write
+readable, robust tests.
+
+Getting started
+---------------
+
+Install ``webdriverplus`` using ``pip``.
+
+.. code-block:: bash
+
+    pip install webdriverplus
+
+Now fire up your python console...
+
+.. code-block:: python
+
+    >>> import webdriverplus
+    >>> driver = webdriverplus.Firefox()
+    >>> driver.get('http://www.google.com')
+    WebDriver Instance (firefox - http://www.google.co.uk/)
+    >>> driver.find('a')
+    WebElementSet(
+        ...
+    )
+
+    driver.find('a').filter(text='Images').click()
 
 
-**A more concise, pythonic API**
-
-``driver.find(id='searchbar')``, instead of ``driver.find_element_by_id('searchbar')``
-
-**A rich set of selectors**
-
-``driver.find(attribute='selected')``, ``driver.find(text='Welcome!')``...
-
-**Chaining**
-
-Eg. ``driver.find_all('li').click()``
-
-**Tree traversal**
-
-Eg. ``elem.children``, ``elem.next``, ``elem.siblings``...
-
-**Shortcuts**
-
-``elem.html``, ``elem.inner_html``
-
-**Actions**
-
-hover, drag_and_drop
+Contents
+--------
 
 .. toctree::
   :maxdepth: 1
 
   selectors
   actions
-  forms
   traversing
   filtering
   inspection
 
-**Inspection**
+API Reference
+-------------
 
-**Manipuation**
+.. toctree::
+  :maxdepth: 1
 
-  jquery?
-  javascript
-
-**Filtering**
-
-  .find
-  .find_all
-  .exists
-  .filter
-  .exclude
-
-chaining ?
-
-with webdriverplus.Firefox() as driver:
-  pass
-
-**SELECTORS: label_text, label_text_contains, selected=True/False, checked=True/False**
+  api/webdriver
+  api/webelementset

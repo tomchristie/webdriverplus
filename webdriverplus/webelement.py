@@ -123,7 +123,14 @@ class WebElement(SelectorMixin, _WebElement):
         return  self._parent.execute_script(script, self)
 
     def __repr__(self):
-        return "<%s>" % self.tag_name
+        ret = self.html
+        ret = ret.replace('\n', ' ').replace('\r', ' ')
+        if len(ret) > 78:
+            ret = ret[:75] + '...'
+        self.style.backgroundColor = '#f9edbe'
+        self.style.borderColor = '#f9edbe'
+        self.style.outline = '1px solid black'
+        return ret
 
     def __hash__(self):
         return hash(self._id)

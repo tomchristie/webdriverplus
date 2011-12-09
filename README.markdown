@@ -17,7 +17,7 @@ Requires the ``selenium`` python package.
 Tests
 -----
 
-``python ./tests.py``
+``python ./runtests.py``
 
 Docs
 ----

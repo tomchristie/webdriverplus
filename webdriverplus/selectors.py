@@ -75,6 +75,9 @@ class SelectorMixin(object):
         return (selector, value)
 
     def find(self, css=None, **kwargs):
+        """
+        Blah
+        """
         (selector, value) = self._get_selector(css, **kwargs)
         return self.find_element(by=selector, value=value)
 

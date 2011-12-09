@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import unittest2 as unittest
+import unittest
 import webdriverplus
 
 driver = None
@@ -8,7 +8,7 @@ driver = None
 
 def setUpModule():
     global driver
-    driver = webdriverplus.Firefox()
+    driver = webdriverplus.WebDriver('firefox')
 
 
 def tearDownModule():
@@ -25,6 +25,7 @@ def tearDownModule():
 
 # find_all().find() is broken
 # No such element exceptions need to be cleaner
+
 
 class DriverTests(unittest.TestCase):
     def setUp(self):

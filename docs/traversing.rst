@@ -164,5 +164,5 @@ siblings
     ...         <li>5</li>
     ...     </ul>
     ... </html>"""
-    >>> driver.open(snippet).find('li.selected').prev_all
+    >>> driver.open(snippet).find('li.selected').siblings
     ['<li>1</li>', '<li>2</li>', '<li>4</li>', '<li>5</li>']

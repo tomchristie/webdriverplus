@@ -98,4 +98,4 @@ class WebElementSet(SelectorMixin, OrderedSet):
         return [elem.javascript(script) for elem in self]
 
     def __repr__(self):
-        return "WebElementSet(%s)" % ', '.join([repr(elem) for elem in self])
+        return "WebElementSet(\n  %s\n)" % '\n  '.join([repr(elem) for elem in self])

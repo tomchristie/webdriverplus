@@ -1,6 +1,8 @@
 *.pyc
 *~
-.DS_Store
+.*
+
+!.gitignore
 
 docs/build/
 html/
