@@ -6,6 +6,16 @@ import tempfile
 
 
 class WebDriverMixin(SelectorMixin):
+    def __init__(self, reuse_browser=False, quit_on_exit=True,
+                 *args, **kwargs):
+        super(WebDriverMixin, self).__init__(*args, **kwargs)
+        self.reuse_browser = reuse_browser
+
+    def quit(self, force=False):
+        if self.reuse_browser and not force:
+            return
+        super(WebDriverMixin, self).quit()
+
     @property
     def _xpath_prefix(self):
         return '//*'

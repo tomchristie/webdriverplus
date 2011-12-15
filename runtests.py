@@ -3,18 +3,6 @@
 import unittest
 import webdriverplus
 
-driver = None
-
-
-def setUpModule():
-    global driver
-    driver = webdriverplus.WebDriver('firefox')
-
-
-def tearDownModule():
-    global driver
-    driver.close()
-
 # WebElements as set
 
 # close_on_shutdown
@@ -27,19 +15,41 @@ def tearDownModule():
 # No such element exceptions need to be cleaner
 
 
-class DriverTests(unittest.TestCase):
+class WebDriverPlusTests(unittest.TestCase):
     def setUp(self):
-        super(DriverTests, self).setUp()
-        self.driver = driver
+        super(WebDriverPlusTests, self).setUp()
+        self.driver = webdriverplus.WebDriver('firefox', reuse_browser=True)
 
-    #def test_get_file(self):
-    #    page_text = 'abc'
-    #    with tempfile.NamedTemporaryFile() as temp:
-    #        temp.write(page_text)
-    #        temp.flush()
-    #        self.driver.get_file(temp.name)
-    #    self.assertEquals(self.driver.page_text,  page_text)
+    def tearDown(self):
+        self.driver.quit()
 
+
+class BrowserPoolingTests(unittest.TestCase):
+    # Note: We don't inherit from WebDriverPlusTests as we don't want the
+    #       default reuse browser behaviour for theses tests.
+
+    def setUp(self):
+        webdriverplus.WebDriver._pool.pop('firefox', None)
+
+    def tearDown(self):
+        for browser, signature in webdriverplus.WebDriver._pool.values():
+            browser.quit(force=True)
+
+    def test_reuse_browser_set(self):
+        browser = webdriverplus.WebDriver('firefox', reuse_browser=True)
+        browser.quit()
+        new_browser = webdriverplus.WebDriver('firefox', reuse_browser=True)
+        self.assertEquals(browser, new_browser)
+
+    def test_reuse_browser_unset(self):
+        browser = webdriverplus.WebDriver('firefox')
+        browser.quit()
+        new_browser = webdriverplus.WebDriver('firefox')
+        self.assertNotEquals(browser, new_browser)
+        new_browser.quit()  # Not quite right this, ought to be auto on tearDown
+
+
+class DriverTests(WebDriverPlusTests):
     def test_open(self):
         page_text = 'abc'
         self.driver.open(page_text)
@@ -54,10 +64,9 @@ class DriverTests(unittest.TestCase):
         self.assertEquals(self.driver.find_all('h2').text, ['456', '789'])
 
 
-class SelectorTests(unittest.TestCase):
+class SelectorTests(WebDriverPlusTests):
     def setUp(self):
         super(SelectorTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <h1>header</h1>
                          <ul id="mylist">
@@ -161,10 +170,9 @@ class SelectorTests(unittest.TestCase):
     # TODO: checked=True, checked=False, selected=True, selected=False
 
 
-class TreeTraversalTests(unittest.TestCase):
+class TreeTraversalTests(WebDriverPlusTests):
     def setUp(self):
         super(TreeTraversalTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <ul>
                              <li>1</li>
@@ -214,10 +222,9 @@ class TreeTraversalTests(unittest.TestCase):
         self.assertEquals(nodes.text, ['1', '2', '4', '5'])
 
 
-class FilteringTests(unittest.TestCase):
+class FilteringTests(WebDriverPlusTests):
     def setUp(self):
         super(FilteringTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <ul>
                              <li>1</li>
@@ -238,10 +245,9 @@ class FilteringTests(unittest.TestCase):
         self.assertEquals(nodes.text, ['1', '2', '4'])
 
 
-class ShortcutTests(unittest.TestCase):
+class ShortcutTests(WebDriverPlusTests):
     def setUp(self):
         super(ShortcutTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <ul>
                              <li>1</li>
@@ -266,10 +272,9 @@ class ShortcutTests(unittest.TestCase):
         self.assertEquals(node.inner_html, '3')
 
 
-class InspectionTests(unittest.TestCase):
+class InspectionTests(WebDriverPlusTests):
     def setUp(self):
         super(InspectionTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <head>
                              <style type="text/css">
@@ -337,10 +342,9 @@ class InspectionTests(unittest.TestCase):
                           {'width': '100px', 'height': '50px'})
 
 
-class FormInspectionTests(unittest.TestCase):
+class FormInspectionTests(WebDriverPlusTests):
     def setUp(self):
         super(FormInspectionTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <form>
                              <select>
@@ -372,10 +376,9 @@ class FormInspectionTests(unittest.TestCase):
         self.assertEquals(elem.find(value='jam').is_checked, True)
 
 
-class ValueTests(unittest.TestCase):
+class ValueTests(WebDriverPlusTests):
     def setUp(self):
         super(ValueTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <form>
                              <input type="text" name="username" value="mike">
@@ -390,10 +393,9 @@ class ValueTests(unittest.TestCase):
         pass
 
 
-class SetTests(unittest.TestCase):
+class SetTests(WebDriverPlusTests):
     def setUp(self):
         super(SetTests, self).setUp()
-        self.driver = driver
         snippet = """<html>
                          <ul>
                              <li>1</li>

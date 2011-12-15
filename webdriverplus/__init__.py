@@ -6,16 +6,40 @@ from webdriverplus.webdriver import WebDriverMixin
 
 
 class WebDriver(WebDriverMixin, Remote):
+    _pool = {}  # name -> (instance, signature)
+
+    @classmethod
+    def _get_from_pool(self, browser):
+        return WebDriver._pool.get(browser, (None, (None, None)))
+
     def __new__(self, browser='firefox', *args, **kwargs):
+
+        reuse_browser = kwargs.get('reuse_browser')
+        signature = (args, kwargs)
         browser = browser.lower()
-        if browser == 'firefox':
-            return Firefox(*args, **kwargs)
+
+        pooled_browser, pooled_signature = WebDriver._get_from_pool(browser)
+
+        reused_pooled_browser = False
+
+        if pooled_signature == signature:
+            driver = pooled_browser
+            reused_pooled_browser = True
+        elif browser == 'firefox':
+            driver = Firefox(*args, **kwargs)
         elif browser == 'chrome':
-            return Chrome(*args, **kwargs)
+            driver = Chrome(*args, **kwargs)
         elif browser == 'ie':
-            return Ie(*args, **kwargs)
+            driver = Ie(*args, **kwargs)
         elif browser == 'remote':
-            return Remote(*args, **kwargs)
+            driver = Remote(*args, **kwargs)
+
+        if reuse_browser and not reused_pooled_browser:
+            if pooled_browser:
+                pooled_browser.quit(force=True)
+            WebDriver._pool[browser] = (driver, signature)
+
+        return driver
 
     def __init__(self, browser='firefox', *args, **kwargs):
         pass

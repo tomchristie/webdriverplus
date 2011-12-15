@@ -42,6 +42,7 @@ Contents
 .. toctree::
   :maxdepth: 1
 
+  browsers
   selectors
   actions
   traversing
