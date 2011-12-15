@@ -87,4 +87,4 @@ class WebDriverMixin(SelectorMixin):
         return self.find(tag_name='body').text
 
     def __repr__(self):
-        return 'WebDriver (%s) - %s' % (self.name, self.current_url)
+        return '<WebDriver Instance, %s>' % (self.name)
