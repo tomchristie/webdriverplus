@@ -4,5 +4,7 @@
 
 !.gitignore
 
-docs/build/
 html/
+build/
+dist/
+*.egg-info/

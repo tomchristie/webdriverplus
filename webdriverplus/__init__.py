@@ -6,6 +6,17 @@ from webdriverplus.webdriver import WebDriverMixin
 
 import atexit
 
+VERSION = (0, 0, 1, 'dev')
+
+assert(VERSION[3] in ('dev', 'final'))
+
+
+def get_version():
+    ret = '%d.%d.%d' % (VERSION[0], VERSION[1], VERSION[2])
+    if VERSION[3] == 'dev':
+        ret += ' development'
+    return ret
+
 
 class WebDriver(WebDriverMixin, Remote):
     _pool = {}  # name -> (instance, signature)
