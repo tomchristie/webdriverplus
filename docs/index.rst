@@ -14,6 +14,8 @@ readable, robust tests.
 Getting started
 ---------------
 
+**TODO: Not actually yet on PyPI!**
+
 Install ``webdriverplus`` using ``pip``.
 
 .. code-block:: bash
