@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 
+import sys
 import unittest
+
 import webdriverplus
 
 # WebElements as set
@@ -14,6 +16,8 @@ import webdriverplus
 # find_all().find() is broken
 # No such element exceptions need to be cleaner
 
+run_slow_tests = '--all' in sys.argv
+
 
 class WebDriverPlusTests(unittest.TestCase):
     def setUp(self):
@@ -24,29 +28,31 @@ class WebDriverPlusTests(unittest.TestCase):
         self.driver.quit()
 
 
-class BrowserPoolingTests(unittest.TestCase):
-    # Note: We don't inherit from WebDriverPlusTests as we don't want the
-    #       default reuse browser behaviour for theses tests.
+if run_slow_tests:
+    class BrowserPoolingTests(unittest.TestCase):
+        # Note: We don't inherit from WebDriverPlusTests as we don't want the
+        #       default reuse browser behaviour for theses tests.
 
-    def setUp(self):
-        webdriverplus.WebDriver._pool.pop('firefox', None)
+        # TODO: Similar tests, but with multiple windows open.
 
-    def tearDown(self):
-        for browser, signature in webdriverplus.WebDriver._pool.values():
-            browser.quit(force=True)
+        def setUp(self):
+            webdriverplus.WebDriver._pool.pop('firefox', None)
 
-    def test_reuse_browser_set(self):
-        browser = webdriverplus.WebDriver('firefox', reuse_browser=True)
-        browser.quit()
-        new_browser = webdriverplus.WebDriver('firefox', reuse_browser=True)
-        self.assertEquals(browser, new_browser)
+        def tearDown(self):
+            for browser, signature in webdriverplus.WebDriver._pool.values():
+                browser.quit(force=True)
 
-    def test_reuse_browser_unset(self):
-        browser = webdriverplus.WebDriver('firefox')
-        browser.quit()
-        new_browser = webdriverplus.WebDriver('firefox')
-        self.assertNotEquals(browser, new_browser)
-        new_browser.quit()  # Not quite right this, ought to be auto on tearDown
+        def test_reuse_browser_set(self):
+            browser = webdriverplus.WebDriver('firefox', reuse_browser=True)
+            browser.quit()
+            other = webdriverplus.WebDriver('firefox', reuse_browser=True)
+            self.assertEquals(browser, other)
+
+        def test_reuse_browser_unset(self):
+            browser = webdriverplus.WebDriver('firefox')
+            browser.quit()
+            other = webdriverplus.WebDriver('firefox')
+            self.assertNotEquals(browser, other)
 
 
 class DriverTests(WebDriverPlusTests):
@@ -419,4 +425,8 @@ class SetTests(WebDriverPlusTests):
 
 
 if __name__ == '__main__':
+    try:
+        sys.argv.remove('--all')
+    except:
+        pass
     unittest.main()

@@ -4,16 +4,26 @@ from selenium.webdriver.ie.webdriver import WebDriver as Ie
 from selenium.webdriver.remote.webdriver import WebDriver as Remote
 from webdriverplus.webdriver import WebDriverMixin
 
+import atexit
+
 
 class WebDriver(WebDriverMixin, Remote):
     _pool = {}  # name -> (instance, signature)
+    _quit_on_exit = set()  # set of instances
 
     @classmethod
-    def _get_from_pool(self, browser):
-        return WebDriver._pool.get(browser, (None, (None, None)))
+    def _at_exit(cls):
+        for driver in cls._quit_on_exit:
+            driver.quit(force=True)
+
+    @classmethod
+    def _get_from_pool(cls, browser):
+        """Returns (instance, (args, kwargs))"""
+        return cls._pool.get(browser, (None, (None, None)))
 
     def __new__(self, browser='firefox', *args, **kwargs):
 
+        quit_on_exit = kwargs.get('quit_on_exit', True)
         reuse_browser = kwargs.get('reuse_browser')
         signature = (args, kwargs)
         browser = browser.lower()
@@ -39,11 +49,16 @@ class WebDriver(WebDriverMixin, Remote):
                 pooled_browser.quit(force=True)
             WebDriver._pool[browser] = (driver, signature)
 
+        if quit_on_exit:
+            WebDriver._quit_on_exit.add(driver)
+
         return driver
 
     def __init__(self, browser='firefox', *args, **kwargs):
         pass
         # Not actually called.  Here for autodoc purposes only.
+
+atexit.register(WebDriver._at_exit)
 
 
 class Firefox(WebDriverMixin, Firefox):
