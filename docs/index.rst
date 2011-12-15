@@ -29,7 +29,7 @@ Now fire up your python console...
     >>> import webdriverplus
     >>> driver = webdriverplus.Firefox()
     >>> driver.get('http://www.google.com')
-    WebDriver Instance (firefox - http://www.google.co.uk/)
+    <WebDriver Instance, firefox>
     >>> driver.find('a')
     WebElementSet(
         ...
