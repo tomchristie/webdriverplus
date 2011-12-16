@@ -114,7 +114,7 @@ element.  Supports getting, setting, and deleting attributes.
     {u'width': u'50px', u'src': u'/static/images/logo.png', u'height': u'50px'}
     >>> elem.attributes['src']
     u'/static/images/logo.png'
-    >>> elem.attribtues['src'] = '/static/images/other.png'
+    >>> elem.attributes['src'] = '/static/images/other.png'
     >>> del(elem.attributes['width'])
     >>> del(elem.attributes['height'])
     >>> elem.attributes
