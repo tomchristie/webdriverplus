@@ -127,9 +127,9 @@ class WebElement(SelectorMixin, _WebElement):
         ret = ret.replace('\n', ' ').replace('\r', ' ')
         if len(ret) > 78:
             ret = ret[:75] + '...'
-        self.style.backgroundColor = '#f9edbe'
-        self.style.borderColor = '#f9edbe'
-        self.style.outline = '1px solid black'
+        #self.style.backgroundColor = '#f9edbe'
+        #self.style.borderColor = '#f9edbe'
+        #self.style.outline = '1px solid black'
         return ret
 
     def __hash__(self):
