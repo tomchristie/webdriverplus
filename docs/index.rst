@@ -71,7 +71,10 @@ Now let's get the headings for all the search results.
 
 Notice that WebDriver Plus has highlighted the selected elements for you, which
 is super helpful for when you're writing tests and trying to make sure you're
-selecting the correct elements.
+selecting the correct elements:
+
+.. image:: screenshot.png
+  :align: center
 
 Overview
 --------

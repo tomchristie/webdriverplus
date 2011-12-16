@@ -57,6 +57,8 @@ Notice that WebDriver Plus has highlighted the selected elements for you, which
 is super helpful for when you're writing tests and trying to make sure you're
 selecting the correct elements.
 
+![image](https://raw.github.com/tomchristie/webdriverplus/master/docs/screenshot.png)
+
 Next steps
 ----------
 
