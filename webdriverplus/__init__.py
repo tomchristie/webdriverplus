@@ -5,6 +5,7 @@ from selenium.webdriver.remote.webdriver import WebDriver as Remote
 from webdriverplus.webdriver import WebDriverMixin
 
 import atexit
+import urllib2
 
 VERSION = (0, 0, 1, 'dev')
 
@@ -25,14 +26,17 @@ class WebDriver(WebDriverMixin, Remote):
     @classmethod
     def _at_exit(cls):
         for driver in cls._quit_on_exit:
-            driver.quit(force=True)
+            try:
+                driver.quit(force=True)
+            except urllib2.URLError:
+                pass
 
     @classmethod
     def _get_from_pool(cls, browser):
         """Returns (instance, (args, kwargs))"""
         return cls._pool.get(browser, (None, (None, None)))
 
-    def __new__(self, browser='firefox', *args, **kwargs):
+    def __new__(cls, browser='firefox', *args, **kwargs):
 
         quit_on_exit = kwargs.get('quit_on_exit', True)
         reuse_browser = kwargs.get('reuse_browser')
