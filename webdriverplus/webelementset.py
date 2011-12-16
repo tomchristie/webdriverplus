@@ -128,7 +128,15 @@ class WebElementSet(SelectorMixin, OrderedSet):
         return [elem.javascript(script) for elem in self]
 
     def __repr__(self):
-        return "WebElementSet(\n  %s\n)" % '\n  '.join([repr(elem) for elem in self])
+        ret = "WebElementSet(\n  %s\n)" % '\n  '.join([repr(elem) for elem in self])
+        script = """for (var i = 0, j = arguments.length; i < j; i++) {
+                        var style = arguments[i].style;
+                        style.backgroundColor = '#f9edbe'
+                        style.borderColor = '#f9edbe'
+                        style.outline = '1px solid black';
+                    }"""
+        self._webdriver._highlight([elem for elem in self])
+        return ret
 
     # Traversal
     @property

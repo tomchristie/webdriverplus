@@ -4,15 +4,16 @@ from webdriverplus.selectors import SelectorMixin
 
 import tempfile
 
+from selenium.common.exceptions import StaleElementReferenceException
 
 class WebDriverMixin(SelectorMixin):
-    _has_quit = False
-
     def __init__(self, reuse_browser=False, quit_on_exit=True,
                  *args, **kwargs):
         super(WebDriverMixin, self).__init__(*args, **kwargs)
         self.reuse_browser = reuse_browser
         self.quit_on_exit = quit_on_exit
+        self._highlighted = None
+        self._has_quit = False
 
     def quit(self, force=False):
         if self._has_quit:
@@ -21,6 +22,35 @@ class WebDriverMixin(SelectorMixin):
             return
         super(WebDriverMixin, self).quit()
         self._has_quit = True
+
+    def _highlight(self, elems):
+        if self._highlighted:
+            script = """for (var i = 0, j = arguments.length; i < j; i++) {
+                            var elem = arguments[i];
+                            elem.style.backgroundColor = elem.getAttribute('savedBackground');
+                            elem.style.borderColor = elem.getAttribute('savedBorder');
+                            elem.style.outline = elem.getAttribute('savedOutline');
+                        }"""
+            try:
+                self.execute_script(script, *self._highlighted)
+            except StaleElementReferenceException:
+                pass
+
+        self._highlighted = elems
+        script = """
+            for (var i = 0, j = arguments.length; i < j; i++) {
+                var elem = arguments[i];
+                elem.setAttribute('savedBackground', elem.style.backgroundColor);
+                elem.setAttribute('savedBorder', elem.style.borderColor);
+                elem.setAttribute('savedOutline', elem.style.outline);
+                elem.style.backgroundColor = '#f9edbe'
+                elem.style.borderColor = '#f9edbe'
+                elem.style.outline = '1px solid black';
+            }"""
+        try:
+            self.execute_script(script, *elems)
+        except StaleElementReferenceException:
+            pass
 
     @property
     def _xpath_prefix(self):
