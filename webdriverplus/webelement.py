@@ -19,15 +19,15 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def children(self):
-        return self.find_all(xpath='./*')
+        return self.find(xpath='./*')
 
     @property
     def descendants(self):
-        return self.find_all(xpath='./descendant::*')
+        return self.find(xpath='./descendant::*')
 
     @property
     def ancestors(self):
-        return self.find_all(xpath='./ancestor::*')
+        return self.find(xpath='./ancestor::*')
 
     @property
     def next(self):
@@ -39,11 +39,11 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def next_all(self):
-        return self.find_all(xpath='./following-sibling::*')
+        return self.find(xpath='./following-sibling::*')
 
     @property
     def prev_all(self):
-        return self.find_all(xpath='./preceding-sibling::*')
+        return self.find(xpath='./preceding-sibling::*')
 
     @property
     def siblings(self):
@@ -72,11 +72,11 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def is_displayed(self):
-        return super(WebElement, self).is_selected()
+        return super(WebElement, self).is_displayed()
 
     @property
     def is_enabled(self):
-        return super(WebElement, self).is_selected()
+        return super(WebElement, self).is_enabled()
 
     @property
     def inner_html(self):

@@ -18,6 +18,10 @@ class OrderedSet(collections.MutableSet):
     def __contains__(self, key):
         return key in self.map
 
+    @property
+    def _first(self):
+        return self.end[NEXT][KEY]
+
     def add(self, key):
         if key not in self.map:
             end = self.end
