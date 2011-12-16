@@ -11,10 +11,13 @@ WedDriver Plus is an extension to the Python wrapper for Selenium WebDriver.
 It gives you a concise and expressive API, which lets you quickly write
 readable, robust tests.
 
+.. note::
+    WebDriver Plus is not yet ready for use.
+    It is in active development.
+    Contributions welcome!
+
 Getting started
 ---------------
-
-**TODO: Not actually yet on PyPI!**
 
 Install ``webdriverplus`` using ``pip``.
 
