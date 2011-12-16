@@ -72,5 +72,4 @@ will not be returned to the browser pool:
 
 .. code-block:: python
 
-    # Do not pass Go.  Do not collect £200.
     browser.quit(force=True)
