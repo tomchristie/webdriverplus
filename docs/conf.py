@@ -131,6 +131,7 @@ html_title = "WebDriver Plus"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = []
 
+analytics_code= "UA-27795084-1"
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 #html_last_updated_fmt = '%b %d, %Y'
