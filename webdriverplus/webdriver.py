@@ -2,9 +2,11 @@ from webdriverplus.webelement import WebElement
 from webdriverplus.webelementset import WebElementSet
 from webdriverplus.selectors import SelectorMixin
 
+import re
 import tempfile
 
 from selenium.common.exceptions import StaleElementReferenceException
+
 
 class WebDriverMixin(SelectorMixin):
     def __init__(self, reuse_browser=False, quit_on_exit=True,
@@ -104,6 +106,8 @@ class WebDriverMixin(SelectorMixin):
         """
         Shortcut to open from text.
         """
+        if not re.match("[^<]*<(html|doctype)", content, re.IGNORECASE):
+            content = '<html>%s</html>' % content
         with tempfile.NamedTemporaryFile() as temp:
             temp.write(content)
             temp.flush()

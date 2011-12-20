@@ -233,15 +233,13 @@ class TreeTraversalTests(WebDriverPlusTests):
 class FilteringTests(WebDriverPlusTests):
     def setUp(self):
         super(FilteringTests, self).setUp()
-        snippet = """<html>
-                         <ul>
-                             <li>1</li>
-                             <li>2</li>
-                             <li class="selected">3</li>
-                             <li>4</li>
-                             <li class="selected">5</li>
-                         </ul>
-                     </html>"""
+        snippet = """<ul>
+                         <li>1</li>
+                         <li>2</li>
+                         <li class="selected">3</li>
+                         <li>4</li>
+                         <li class="selected">5</li>
+                     </ul>"""
         self.driver.open(snippet)
 
     def test_filter(self):
@@ -256,15 +254,13 @@ class FilteringTests(WebDriverPlusTests):
 class ShortcutTests(WebDriverPlusTests):
     def setUp(self):
         super(ShortcutTests, self).setUp()
-        snippet = """<html>
-                         <ul>
-                             <li>1</li>
-                             <li>2</li>
-                             <li class="selected">3</li>
-                             <li>4</li>
-                             <li>5</li>
-                         </ul>
-                     </html>"""
+        snippet = """<ul>
+                         <li>1</li>
+                         <li>2</li>
+                         <li class="selected">3</li>
+                         <li>4</li>
+                         <li>5</li>
+                     </ul>"""
         self.driver.open(snippet)
 
     def test_index(self):
@@ -387,11 +383,9 @@ class FormInspectionTests(WebDriverPlusTests):
 class ValueTests(WebDriverPlusTests):
     def setUp(self):
         super(ValueTests, self).setUp()
-        snippet = """<html>
-                         <form>
-                             <input type="text" name="username" value="mike">
-                         </form>
-                     </html>"""
+        snippet = """<form>
+                         <input type="text" name="username" value="mike">
+                     </form>"""
         self.driver.open(snippet)
 
     def test_get_value(self):
@@ -404,20 +398,18 @@ class ValueTests(WebDriverPlusTests):
 class SetTests(WebDriverPlusTests):
     def setUp(self):
         super(SetTests, self).setUp()
-        snippet = """<html>
-                         <ul>
-                             <li>1</li>
-                             <li>2</li>
-                             <li>3</li>
-                             <li>4</li>
-                             <li>5</li>
-                         </ul>
-                         <ul>
-                             <li>a</li>
-                             <li>b</li>
-                             <li>c</li>
-                         </ul>
-                     </html>"""
+        snippet = """<ul>
+                         <li>1</li>
+                         <li>2</li>
+                         <li>3</li>
+                         <li>4</li>
+                         <li>5</li>
+                     </ul>
+                     <ul>
+                         <li>a</li>
+                         <li>b</li>
+                         <li>c</li>
+                     </ul>"""
         self.driver.open(snippet)
 
     def test_set_uniqueness(self):

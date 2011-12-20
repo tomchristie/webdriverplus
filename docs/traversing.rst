@@ -18,8 +18,11 @@ children
     ...     </ul>
     ... </html>"""
     >>> driver.open(snippet).find('ul').children.html
-    ['<li>1</li>', '<li><strong>2</strong></li>', '<li>3</li>']
-
+    WebElementSet(
+      <li>1</li>
+      <li><strong>2</strong></li>
+      <li>3</li>
+    )
 
 parent
 ------
