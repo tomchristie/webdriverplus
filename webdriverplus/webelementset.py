@@ -27,6 +27,8 @@ class WebElementSet(SelectorMixin, OrderedSet):
     #    return ret
 
     def filter(self, css=None, **kwargs):
+        if not css or kwargs:
+            return self
         others = self._webdriver.find(css, **kwargs)
         return self & others
 
@@ -139,65 +141,56 @@ class WebElementSet(SelectorMixin, OrderedSet):
         return ret
 
     # Traversal
-    @property
-    def parent(self):
+    def parent(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.parent
-        return ret
+            ret |= elem.parent()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def children(self):
+    def children(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.children
-        return ret
+            ret |= elem.children()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def descendants(self):
+    def descendants(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.descendants
-        return ret
+            ret |= elem.descendants()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def ancestors(self):
+    def ancestors(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.ancestors
-        return ret
+            ret |= elem.ancestors()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def next(self):
+    def next(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.next
-        return ret
+            ret |= elem.next()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def prev(self):
+    def prev(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.prev
-        return ret
+            ret |= elem.prev()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def next_all(self):
+    def next_all(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.next_all
-        return ret
+            ret |= elem.next_all()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def prev_all(self):
+    def prev_all(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.prev_all
-        return ret
+            ret |= elem.prev_all()
+        return ret.filter(*args, **kwargs)
 
-    @property
-    def siblings(self):
+    def siblings(self, *args, **kwargs):
         ret = self._empty()
         for elem in self:
-            ret |= elem.siblings
-        return ret
+            ret |= elem.siblings()
+        return ret.filter(*args, **kwargs)

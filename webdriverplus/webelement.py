@@ -9,45 +9,39 @@ class WebElement(SelectorMixin, _WebElement):
         return './/*'
 
     # Traversal
-    @property
-    def parent(self):
+    def parent(self, *args, **kwargs):
         """
         Note: We're overriding the default WebElement.parent behaviour here.
         (Normally .parent is a property that returns the WebDriver object.)
         """
-        return self.find(xpath='..')
+        ret = self.find(xpath='..')
+        if args or kwargs:
+            ret = ret.filter(*args, **kwargs)
+        return ret
 
-    @property
-    def children(self):
+    def children(self, *args, **kwargs):
         return self.find(xpath='./*')
 
-    @property
-    def descendants(self):
+    def descendants(self, *args, **kwargs):
         return self.find(xpath='./descendant::*')
 
-    @property
-    def ancestors(self):
+    def ancestors(self, *args, **kwargs):
         return self.find(xpath='./ancestor::*')
 
-    @property
-    def next(self):
+    def next(self, *args, **kwargs):
         return self.find(xpath='./following-sibling::*[1]')
 
-    @property
-    def prev(self):
+    def prev(self, *args, **kwargs):
         return self.find(xpath='./preceding-sibling::*[1]')
 
-    @property
-    def next_all(self):
+    def next_all(self, *args, **kwargs):
         return self.find(xpath='./following-sibling::*')
 
-    @property
-    def prev_all(self):
+    def prev_all(self, *args, **kwargs):
         return self.find(xpath='./preceding-sibling::*')
 
-    @property
-    def siblings(self):
-        return self.prev_all | self.next_all
+    def siblings(self, *args, **kwargs):
+        return self.prev_all() | self.next_all()
 
     # Inspection & Manipulation
     @property
@@ -94,7 +88,7 @@ class WebElement(SelectorMixin, _WebElement):
 
     @property
     def index(self):
-        return len(self.prev_all)
+        return len(self.prev_all())
 
     @property
     def style(self):

@@ -173,9 +173,9 @@ class SelectorTests(WebDriverPlusTests):
     # TODO: checked=True, checked=False, selected=True, selected=False
 
 
-class TreeTraversalTests(WebDriverPlusTests):
+class TraversalTests(WebDriverPlusTests):
     def setUp(self):
-        super(TreeTraversalTests, self).setUp()
+        super(TraversalTests, self).setUp()
         snippet = """<html>
                          <ul>
                              <li>1</li>
@@ -188,44 +188,49 @@ class TreeTraversalTests(WebDriverPlusTests):
         self.driver.open(snippet)
 
     def test_children(self):
-        nodes = self.driver.find('ul').children
+        nodes = self.driver.find('ul').children()
         text = [node.text for node in nodes]
         self.assertEquals(text, ['1', '2', '3', '4', '5'])
 
+    def test_filtering_traversal(self):
+        nodes = self.driver.find('ul').children('.selected')
+        text = [node.text for node in nodes]
+        self.assertEquals(text, ['3'])
+
     def test_parent(self):
-        node = self.driver.find('.selected').parent
+        node = self.driver.find('.selected').parent()
         self.assertEquals(node.tag_name, 'ul')
 
     def test_descendants(self):
-        nodes = self.driver.find('ul').descendants
+        nodes = self.driver.find('ul').descendants()
         tag_names = [node.tag_name for node in nodes]
         self.assertEquals(tag_names, ['li', 'li', 'li', 'li', 'li', 'strong'])
 
     def test_ancestors(self):
-        nodes = self.driver.find(class_name='selected').ancestors
+        nodes = self.driver.find(class_name='selected').ancestors()
         tag_names = [node.tag_name for node in nodes]
         self.assertEquals(tag_names, ['html', 'body', 'ul'])
 
     def test_next(self):
-        node = self.driver.find('.selected').next
+        node = self.driver.find('.selected').next()
         self.assertEquals(node.text, '4')
 
     def test_prev(self):
-        node = self.driver.find('.selected').prev
+        node = self.driver.find('.selected').prev()
         self.assertEquals(node.text, '2')
 
     def test_next_all(self):
-        nodes = self.driver.find('.selected').next_all
+        nodes = self.driver.find('.selected').next_all()
         text = [node.text for node in nodes]
         self.assertEquals(text, ['4', '5'])
 
     def test_prev_all(self):
-        nodes = self.driver.find('.selected').prev_all
+        nodes = self.driver.find('.selected').prev_all()
         text = [node.text for node in nodes]
         self.assertEquals(text, ['1', '2'])
 
     def test_siblings(self):
-        nodes = self.driver.find('.selected').siblings
+        nodes = self.driver.find('.selected').siblings()
         text = [node.text for node in nodes]
         self.assertEquals(text, ['1', '2', '4', '5'])
 
@@ -415,7 +420,7 @@ class SetTests(WebDriverPlusTests):
     def test_set_uniqueness(self):
         nodes = self.driver.find('li')
         self.assertEquals(len(nodes), 8)
-        self.assertEquals(len(nodes.parent), 2)
+        self.assertEquals(len(nodes.parent()), 2)
 
 
 if __name__ == '__main__':

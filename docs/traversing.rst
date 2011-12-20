@@ -6,6 +6,9 @@ Traversing
 children
 --------
 
+Get the children of each element in the set of matched elements, optionally
+filtered by a selector.
+
 .. code-block:: python
 
     >>> from webdriverplus import WebDriver
@@ -25,6 +28,9 @@ children
 parent
 ------
 
+Get the parent of each element in the current set of matched elements,
+optionally filtered by a selector.
+
 .. code-block:: python
 
     >>> from webdriverplus import WebDriver
@@ -41,6 +47,8 @@ parent
 
 descendants
 -----------
+
+Get the descendants of each element in the current set of matched elements.
 
 .. code-block:: python
 
@@ -59,8 +67,16 @@ descendants
       <li>3</li>
     )
 
+.. note::
+
+    Unlike the other traversal operations ``.descendants()`` cannot be
+    filtered by a selector.  Use ``.find()`` instead.
+
 ancestors
 ---------
+
+Get the ancestors of each element in the current set of matched elements,
+optionally filtered by a selector.
 
 .. code-block:: python
 
@@ -71,7 +87,7 @@ ancestors
     ...     <li class="selected">2</li>
     ...     <li>3</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('.selected').ancestors
+    >>> WebDriver().open(snippet).find('.selected').parents
     WebElementSet(
       <html webdriver="true"><head></head><body><ul> <li>1</li> <li class="select...
       <body><ul> <li>1</li> <li class="selected">2</li> <li>3</li> </ul></body>
@@ -80,6 +96,9 @@ ancestors
 
 next
 ----
+
+Get the immediately following sibling of each element in the set of matched
+elements, optionally filtered by a selector.
 
 .. code-block:: python
 
@@ -100,6 +119,9 @@ next
 prev
 ----
 
+Get the immediately preceding sibling of each element in the set of matched
+elements, optionally filtered by a selector.
+
 .. code-block:: python
 
     >>> from webdriverplus import WebDriver
@@ -118,6 +140,9 @@ prev
 
 next_all
 --------
+
+Get all following siblings of each element in the set of matched elements,
+optionally filtered by a selector.
 
 .. code-block:: python
 
@@ -139,6 +164,9 @@ next_all
 prev_all
 --------
 
+Get all preceding siblings of each element in the set of matched elements,
+optionally filtered by a selector.
+
 .. code-block:: python
 
     >>> from webdriverplus import WebDriver
@@ -158,6 +186,9 @@ prev_all
 
 siblings
 --------
+
+Get the siblings of each element in the set of matched elements, optionally
+filtered by a selector.
 
 .. code-block:: python
 
