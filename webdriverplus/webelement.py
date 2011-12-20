@@ -22,7 +22,7 @@ class WebElement(SelectorMixin, _WebElement):
     def children(self, *args, **kwargs):
         return self.find(xpath='./*')
 
-    def descendants(self, *args, **kwargs):
+    def descendants(self):
         return self.find(xpath='./descendant::*')
 
     def ancestors(self, *args, **kwargs):

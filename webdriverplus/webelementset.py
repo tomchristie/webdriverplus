@@ -153,11 +153,11 @@ class WebElementSet(SelectorMixin, OrderedSet):
             ret |= elem.children()
         return ret.filter(*args, **kwargs)
 
-    def descendants(self, *args, **kwargs):
+    def descendants(self):
         ret = self._empty()
         for elem in self:
             ret |= elem.descendants()
-        return ret.filter(*args, **kwargs)
+        return ret
 
     def ancestors(self, *args, **kwargs):
         ret = self._empty()
