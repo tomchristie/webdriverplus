@@ -124,7 +124,7 @@ class WebElement(SelectorMixin, _WebElement):
 
     def __repr__(self):
         ret = self.html
-        ret = ret.replace('\n', ' ').replace('\r', ' ')
+        ret = ' '.join(ret.split())
         if len(ret) > 78:
             ret = ret[:75] + '...'
         #self.style.backgroundColor = '#f9edbe'
