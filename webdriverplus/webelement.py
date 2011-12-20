@@ -15,33 +15,38 @@ class WebElement(SelectorMixin, _WebElement):
         (Normally .parent is a property that returns the WebDriver object.)
         """
         ret = self.find(xpath='..')
-        if args or kwargs:
-            ret = ret.filter(*args, **kwargs)
-        return ret
+        return ret.filter(*args, **kwargs)
 
     def children(self, *args, **kwargs):
-        return self.find(xpath='./*')
+        ret = self.find(xpath='./*')
+        return ret.filter(*args, **kwargs)
 
     def descendants(self):
         return self.find(xpath='./descendant::*')
 
     def ancestors(self, *args, **kwargs):
-        return self.find(xpath='./ancestor::*')
+        ret = self.find(xpath='./ancestor::*')
+        return ret.filter(*args, **kwargs)
 
     def next(self, *args, **kwargs):
-        return self.find(xpath='./following-sibling::*[1]')
+        ret = self.find(xpath='./following-sibling::*[1]')
+        return ret.filter(*args, **kwargs)
 
     def prev(self, *args, **kwargs):
-        return self.find(xpath='./preceding-sibling::*[1]')
+        ret = self.find(xpath='./preceding-sibling::*[1]')
+        return ret.filter(*args, **kwargs)
 
     def next_all(self, *args, **kwargs):
-        return self.find(xpath='./following-sibling::*')
+        ret = self.find(xpath='./following-sibling::*')
+        return ret.filter(*args, **kwargs)
 
     def prev_all(self, *args, **kwargs):
-        return self.find(xpath='./preceding-sibling::*')
+        ret = self.find(xpath='./preceding-sibling::*')
+        return ret.filter(*args, **kwargs)
 
     def siblings(self, *args, **kwargs):
-        return self.prev_all() | self.next_all()
+        ret = self.prev_all() | self.next_all()
+        return ret.filter(*args, **kwargs)
 
     # Inspection & Manipulation
     @property
