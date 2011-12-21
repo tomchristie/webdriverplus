@@ -1,8 +1,8 @@
 WebDriver Plus
 ==============
 
-The most concise and powerful way to use Selenium with Python
--------------------------------------------------------------
+The most simple and powerful way to use Selenium with Python
+------------------------------------------------------------
 
 WedDriver Plus is an extension to the Python bindings for Selenium WebDriver,
 which gives you a more concise and expressive API.
