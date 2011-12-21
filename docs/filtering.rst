@@ -3,8 +3,8 @@
 Filtering
 =========
 
-The `filter()` and `exclude()` methods can be used to filter the elements in
-a WebElementSet.
+The ``filter()`` and ``exclude()`` methods can be used to select a subset of
+elements from a ``WebElementSet``.
 
 filter(*selector*)
 ------------------
