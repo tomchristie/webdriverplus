@@ -30,7 +30,8 @@ What's so great about WebDriver Plus?
     using now, but be aware that APIs are still subject to change, and that
     the codebase is still being very actively worked on.
 
-`Help contribute on GitHub! <https://github.com/tomchristie/webdriverplus>`_
+`Help contribute on GitHub <https://github.com/tomchristie/webdriverplus>`_ or
+join the `discussion group <https://groups.google.com/forum/#!forum/webdriver-plus>`_.
 
 
 Getting started
