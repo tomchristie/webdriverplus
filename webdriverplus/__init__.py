@@ -7,7 +7,7 @@ from webdriverplus.webdriver import WebDriverMixin
 import atexit
 import urllib2
 
-VERSION = (0, 0, 3, 'final')
+VERSION = (0, 0, 4, 'dev')
 
 assert(VERSION[3] in ('dev', 'final'))
 
@@ -15,7 +15,7 @@ assert(VERSION[3] in ('dev', 'final'))
 def get_version():
     ret = '%d.%d.%d' % (VERSION[0], VERSION[1], VERSION[2])
     if VERSION[3] == 'dev':
-        ret += ' development'
+        ret += '-dev'
     return ret
 
 
