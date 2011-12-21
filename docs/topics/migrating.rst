@@ -5,7 +5,15 @@ Migrating to WebDriver Plus
 
 Where possible WebDriver Plus remains compatible with WebDriver, which means
 that migrating can often be as simple as importing ``webdriverplus`` in place
-of ``webdriver``:
+of ``webdriver``.
+
+So you'd replace your existing import:
+
+.. code-block:: python
+
+    from selenium import webdriver
+
+with this:
 
 .. code-block:: python
 

@@ -39,7 +39,7 @@ unnamed argument to ``.find()`` it will be treated as a css selector.
     browser.find('div#content a')  # All 'a' tags within the 'content' div
 
 Multiple selectors can be used in a single expression.  The resulting set will
-be the set of elements that match all the given selectors.  **TODO**
+be the set of elements that match all the given selectors.
 
 .. code-block:: python
 
