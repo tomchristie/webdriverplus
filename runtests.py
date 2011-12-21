@@ -66,7 +66,6 @@ class DriverTests(WebDriverPlusTests):
         self.assertEquals(self.driver.find('h2').text, '456')
 
 
-
 class SelectorTests(WebDriverPlusTests):
     def setUp(self):
         super(SelectorTests, self).setUp()
@@ -77,6 +76,7 @@ class SelectorTests(WebDriverPlusTests):
                              <li>two</li>
                              <li class="selected">three</li>
                              <li><a href="#">four</a></li>
+                             <span>one</span>
                          </ul>
                          <form>
                              <label for="username">Username:</label>
@@ -91,6 +91,14 @@ class SelectorTests(WebDriverPlusTests):
                          </form>
                      </html>"""
         self.driver.open(snippet)
+
+    def test_multiple_selectors(self):
+        node = self.driver.find('li', text='one')
+        self.assertEquals(node.html, '<li>one</li>')
+
+    def test_multiple_named_selectors(self):
+        node = self.driver.find(tag_name='li', text='one')
+        self.assertEquals(node.html, '<li>one</li>')
 
     def test_id(self):
         node = self.driver.find(id='mylist')

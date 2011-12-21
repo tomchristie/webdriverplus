@@ -31,7 +31,7 @@ class SelectorMixin(object):
         'link_contains':
             lambda self, val: (By.PARTIAL_LINK_TEXT, val),
         'attribute':
-            lambda self, val: (By.XPATH, '//*[@%s]' % val),
+            lambda self, val: (By.XPATH, '%s[@%s]' % (self._xpath_prefix, val)),
         'attribute_value':
             lambda self, val: (By.XPATH,
                          '%s[@%s=%s]' % (self._xpath_prefix, val[0], xpath_literal(val[1]))),
@@ -62,21 +62,25 @@ class SelectorMixin(object):
         # TODO: label, label_contains
     }
 
-    def _get_selector(self, css=None, **kwargs):
-        if css:
-            kwargs['css'] = css
-        assert len(kwargs) == 1, 'no selector argument supplied.'
-
-        arg, value = kwargs.items()[0]
-        func = self._ARG_TO_SELECTOR.get(arg, None)
-        assert func, "'%s' is not a valid selector argument." % arg
-        selector, value = func(self, value)
-
-        return (selector, value)
+    def _get_selector(self, **kwargs):
+        for arg, value in kwargs.items():
+            func = self._ARG_TO_SELECTOR.get(arg, None)
+            assert func, "'%s' is not a valid selector argument." % arg
+            yield func(self, value)  # (selector, value) tuple
 
     def find(self, css=None, **kwargs):
-        (selector, value) = self._get_selector(css, **kwargs)
-        return self.find_elements(by=selector, value=value)
+        if css:
+            kwargs['css'] = css
+        assert kwargs, 'no selector argument supplied.'
+
+        elems = None
+        for selector, value in self._get_selector(**kwargs):
+            if elems:
+                other = self.find_elements(by=selector, value=value)
+                elems &= other
+            else:
+                elems = self.find_elements(by=selector, value=value)
+        return elems
 
     #def find_all(self, css=None, **kwargs):
     #    (selector, value) = self._get_selector(css, **kwargs)
