@@ -24,8 +24,11 @@ What's so great about WebDriver Plus?
 * Element highlighting makes working from the Python console a joy.
 
 .. note::
-    WebDriver Plus is not yet ready for use.
-    It is in active development.
+    WebDriver Plus is currently in alpha.
+
+    It's probably good enough to start
+    using now, but be aware that APIs are still subject to change, and that
+    the codebase is still being very actively worked on.
 
 `Help contribute on GitHub! <https://github.com/tomchristie/webdriverplus>`_
 
