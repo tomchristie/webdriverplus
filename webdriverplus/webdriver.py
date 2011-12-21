@@ -21,6 +21,9 @@ class WebDriverMixin(SelectorMixin):
         if self._has_quit:
             return
         if self.reuse_browser and not force:
+            alert = self.alert
+            if alert:
+                alert.dismiss()
             return
         super(WebDriverMixin, self).quit()
         self._has_quit = True
@@ -119,6 +122,15 @@ class WebDriverMixin(SelectorMixin):
         Returns the full page text.
         """
         return self.find(tag_name='body').text
+
+    @property
+    def alert(self):
+        alert = self.switch_to_alert()
+        try:
+            alert.text
+        except:
+            return None
+        return alert
 
     def __repr__(self):
         return '<WebDriver Instance, %s>' % (self.name)
