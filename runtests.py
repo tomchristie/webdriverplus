@@ -423,6 +423,46 @@ class SetTests(WebDriverPlusTests):
         self.assertEquals(len(nodes.parent()), 2)
 
 
+class ActionTests(WebDriverPlusTests):
+    def test_click(self):
+        snippet = "<a onclick=\"alert('click')\">here</a>"
+        self.driver.open(snippet).find('a').click()
+        self.assertEquals(self.driver.alert.text, 'click')
+
+    def test_double_click(self):
+        snippet = "<a onDblclick=\"alert('double click')\">here</a>"
+        self.driver.open(snippet).find('a').double_click()
+        self.assertEquals(self.driver.alert.text, 'double click')
+
+    def test_context_click(self):
+        snippet = "<a onclick=\"alert(event.button)\">here</a>"
+        self.driver.open(snippet).find('a').context_click()
+        self.assertEquals(self.driver.alert.text, '2')
+
+    def test_click_and_hold(self):
+        snippet = "<a onMouseDown=\"alert('mouse down')\">here</a>"
+        self.driver.open(snippet).find('a').click_and_hold()
+        self.assertEquals(self.driver.alert.text, 'mouse down')
+
+    def test_release(self):
+        snippet = "<a onMouseUp=\"alert('mouse up')\">here</a>"
+        elem = self.driver.open(snippet).find('a')
+        elem.click_and_hold()
+        self.assertEquals(self.driver.alert, None)
+        elem.release()
+        self.assertEquals(self.driver.alert.text, 'mouse up')
+
+    def test_move_to(self):
+        snippet = "<a onMouseOver=\"alert('mouse over')\">here</a>"
+        self.driver.open(snippet).find('a').move_to()
+        self.assertEquals(self.driver.alert.text, 'mouse over')
+
+    def test_submit(self):
+        snippet = "<form onSubmit=\"alert('submit')\"><input></input></form>"
+        self.driver.open(snippet).find('input').submit()
+        self.assertEquals(self.driver.alert.text, 'submit')
+
+
 if __name__ == '__main__':
     try:
         sys.argv.remove('--all')

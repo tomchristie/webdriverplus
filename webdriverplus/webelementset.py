@@ -44,20 +44,42 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def text(self):
         return self._first.text
 
+    # Events...
     def click(self):
-        [elem.click for elem in self]
+        self._first.click()
+        return self
+
+    def double_click(self):
+        self._first.double_click()
+        return self
+
+    def context_click(self):
+        self._first.context_click()
+        return self
+
+    def click_and_hold(self):
+        self._first.click_and_hold()
+        return self
+
+    def release(self):
+        self._first.release()
+        return self
+
+    def move_to(self):
+        self._first.move_to()
         return self
 
     def submit(self):
-        [elem.submit() for elem in self]
+        self._first.submit()
         return self
 
     def clear(self):
-        [elem.clear() for elem in self]
+        self._first.clear()
         return self
 
+    #
     def get_attribute(self, name):
-        return [elem.get_attribute(name) for elem in self]
+        return self._first.get_attribute(name)
 
     @property
     def is_selected(self):
@@ -94,10 +116,6 @@ class WebElementSet(SelectorMixin, OrderedSet):
     @property
     def index(self):
         return self._first.index
-
-    @property
-    def innder_html(self):
-        return self._first.size
 
     @property
     def value(self):

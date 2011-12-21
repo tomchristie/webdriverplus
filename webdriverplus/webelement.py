@@ -1,6 +1,75 @@
 from selenium.webdriver.remote.webelement import WebElement as _WebElement
+from selenium.webdriver.common.action_chains import ActionChains
+
 from webdriverplus.selectors import SelectorMixin
 from webdriverplus.wrappers import Style, Attributes, Size, Location
+
+
+# http://stackoverflow.com/questions/6157929/how-to-simulate-mouse-click-using-javascript/6158050#6158050
+def simulate_event(event, **options):
+    return """
+    function simulate(element, eventName)
+    {
+        var options = extend(defaultOptions, arguments[2] || {});
+        var oEvent, eventType = null;
+
+        for (var name in eventMatchers)
+        {
+            if (eventMatchers[name].test(eventName)) { eventType = name; break; }
+        }
+
+        if (!eventType)
+            throw new SyntaxError('Only HTMLEvents and MouseEvents interfaces are supported');
+
+        if (document.createEvent)
+        {
+            oEvent = document.createEvent(eventType);
+            if (eventType == 'HTMLEvents')
+            {
+                oEvent.initEvent(eventName, options.bubbles, options.cancelable);
+            }
+            else
+            {
+                oEvent.initMouseEvent(eventName, options.bubbles, options.cancelable, document.defaultView,
+          options.button, options.pointerX, options.pointerY, options.pointerX, options.pointerY,
+          options.ctrlKey, options.altKey, options.shiftKey, options.metaKey, options.button, element);
+            }
+            element.dispatchEvent(oEvent);
+        }
+        else
+        {
+            options.clientX = options.pointerX;
+            options.clientY = options.pointerY;
+            var evt = document.createEventObject();
+            oEvent = extend(evt, options);
+            element.fireEvent('on' + eventName, oEvent);
+        }
+        return element;
+    }
+
+    function extend(destination, source) {
+        for (var property in source)
+          destination[property] = source[property];
+        return destination;
+    }
+
+    var eventMatchers = {
+        'HTMLEvents': /^(?:load|unload|abort|error|select|change|submit|reset|focus|blur|resize|scroll)$/,
+        'MouseEvents': /^(?:click|dblclick|mouse(?:down|up|over|move|out))$/
+    }
+    var defaultOptions = {
+        pointerX: 0,
+        pointerY: 0,
+        button: 0,
+        ctrlKey: false,
+        altKey: false,
+        shiftKey: false,
+        metaKey: false,
+        bubbles: true,
+        cancelable: true
+    }
+
+    simulate(arguments[0], "%s", %s);""" % (event, repr(options))
 
 
 class WebElement(SelectorMixin, _WebElement):
@@ -120,6 +189,28 @@ class WebElement(SelectorMixin, _WebElement):
     def jquery(self, script):
         script = "return $(arguments[0]).%s;" % script
         return  self._parent.execute_script(script, self)
+
+    # Actions...
+    # Native events not supported on mac.
+    def double_click(self):
+        self._parent.execute_script(simulate_event('dblclick'), self)
+        #ActionChains(self._parent).double_click(self).perform()
+
+    def context_click(self):
+        self._parent.execute_script(simulate_event('click', button=2), self)
+        #ActionChains(self._parent).double_click(self).perform()
+
+    def click_and_hold(self):
+        self._parent.execute_script(simulate_event('mousedown'), self)
+        #ActionChains(self._parent).click_and_hold(self).perform()
+
+    def release(self):
+        self._parent.execute_script(simulate_event('mouseup'), self)
+        #ActionChains(self._parent).click_and_hold(self).perform()
+
+    def move_to(self):
+        self._parent.execute_script(simulate_event('mouseover'), self)
+        #ActionChains(self._parent).move_to_element(self).perform()
 
     def __repr__(self):
         ret = self.html
