@@ -9,7 +9,7 @@ elements from a ``WebElementSet``.
 filter(*selector*)
 ------------------
 
-Filters the ``WebElementSet`` to only include elements that match the selector.
+Filters a ``WebElementSet`` to only include elements that match the selector.
 
 .. code-block:: python
 
@@ -31,7 +31,7 @@ Filters the ``WebElementSet`` to only include elements that match the selector.
 exclude(*selector*)
 -------------------
 
-Filters the ``WebElementSet`` to only include elements that do not match the
+Filters a ``WebElementSet`` to only include elements that do not match the
 selector.
 
 .. code-block:: python
