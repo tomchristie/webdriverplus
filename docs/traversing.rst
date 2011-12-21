@@ -34,7 +34,7 @@ filtered by a selector.
     ...     <li><strong>2</strong></li>
     ...     <li>3</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('ul').children
+    >>> WebDriver().open(snippet).find('ul').children()
     WebElementSet(
       <li>1</li>
       <li><strong>2</strong></li>
@@ -56,7 +56,7 @@ optionally filtered by a selector.
     ...     <li><strong>2</strong></li>
     ...     <li>3</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('strong').parent
+    >>> WebDriver().open(snippet).find('strong').parent()
     WebElementSet(
       <li><strong>2</strong></li>
     )
@@ -75,7 +75,7 @@ Get the descendants of each element in the current set of matched elements.
     ...     <li><strong>2</strong></li>
     ...     <li>3</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('ul').descendants
+    >>> WebDriver().open(snippet).find('ul').descendants()
     WebElementSet(
       <li>1</li>
       <li><strong>2</strong></li>
@@ -104,7 +104,7 @@ optionally filtered by a selector.
     ...     <li class="selected">2</li>
     ...     <li>3</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('.selected').parents
+    >>> WebDriver().open(snippet).find('.selected').parents()
     WebElementSet(
       <html webdriver="true"><head></head><body><ul> <li>1</li> <li class="select...
       <body><ul> <li>1</li> <li class="selected">2</li> <li>3</li> </ul></body>
@@ -128,7 +128,7 @@ elements, optionally filtered by a selector.
     ...     <li>4</li>
     ...     <li>5</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('li.selected').next
+    >>> WebDriver().open(snippet).find('li.selected').next()
     WebElementSet(
       <li>4</li>
     )
@@ -150,7 +150,7 @@ elements, optionally filtered by a selector.
     ...     <li>4</li>
     ...     <li>5</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('li.selected').prev
+    >>> WebDriver().open(snippet).find('li.selected').prev()
     WebElementSet(
       <li>2</li>
     )
@@ -172,7 +172,7 @@ optionally filtered by a selector.
     ...     <li>4</li>
     ...     <li>5</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('li.selected').next_all
+    >>> WebDriver().open(snippet).find('li.selected').next_all()
     WebElementSet(
       <li>4</li>
       <li>5</li>
@@ -195,7 +195,7 @@ optionally filtered by a selector.
     ...     <li>4</li>
     ...     <li>5</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('li.selected').prev_all
+    >>> WebDriver().open(snippet).find('li.selected').prev_all()
     WebElementSet(
       <li>1</li>
       <li>2</li>
@@ -218,7 +218,7 @@ filtered by a selector.
     ...     <li>4</li>
     ...     <li>5</li>
     ... </ul>"""
-    >>> WebDriver().open(snippet).find('li.selected').siblings
+    >>> WebDriver().open(snippet).find('li.selected').siblings()
     WebElementSet(
       <li>1</li>
       <li>2</li>

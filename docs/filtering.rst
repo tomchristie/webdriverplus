@@ -22,7 +22,7 @@ Filters a ``WebElementSet`` to only include elements that match the selector.
     ...     <li>4</li>
     ...     <li class="selected">5</li>
     ... </ul>"""
-    >>> elems = WebDriver().open(snippet).find('li').filter('.selected')
+    >>> WebDriver().open(snippet).find('li').filter('.selected')
     WebElementSet(
       <li class="selected">2</li>
       <li class="selected">5</li>
