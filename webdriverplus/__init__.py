@@ -1,8 +1,10 @@
-from selenium.webdriver.firefox.webdriver import WebDriver as Firefox
-from selenium.webdriver.chrome.webdriver import WebDriver as Chrome
-from selenium.webdriver.ie.webdriver import WebDriver as Ie
-from selenium.webdriver.remote.webdriver import WebDriver as Remote
+from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.firefox.webdriver import WebDriver as _Firefox
+from selenium.webdriver.chrome.webdriver import WebDriver as _Chrome
+from selenium.webdriver.ie.webdriver import WebDriver as _Ie
+from selenium.webdriver.remote.webdriver import WebDriver as _Remote
 from webdriverplus.webdriver import WebDriverMixin
+from webdriverplus.webelement import WebElement
 
 import atexit
 import urllib2
@@ -19,9 +21,10 @@ def get_version():
     return ret
 
 
-class WebDriver(WebDriverMixin, Remote):
+class WebDriver(WebDriverMixin):
     _pool = {}  # name -> (instance, signature)
     _quit_on_exit = set()  # set of instances
+    _default_browser = 'firefox'
 
     @classmethod
     def _at_exit(cls):
@@ -36,8 +39,9 @@ class WebDriver(WebDriverMixin, Remote):
         """Returns (instance, (args, kwargs))"""
         return cls._pool.get(browser, (None, (None, None)))
 
-    def __new__(cls, browser='firefox', *args, **kwargs):
+    def __new__(cls, browser=None, *args, **kwargs):
 
+        browser = browser or cls._default_browser
         quit_on_exit = kwargs.get('quit_on_exit', True)
         reuse_browser = kwargs.get('reuse_browser')
         signature = (args, kwargs)
@@ -58,6 +62,8 @@ class WebDriver(WebDriverMixin, Remote):
             driver = Ie(*args, **kwargs)
         elif browser == 'remote':
             driver = Remote(*args, **kwargs)
+        elif browser == 'htmlunit':
+            driver = HtmlUnit(*args, **kwargs)
 
         if reuse_browser and not reused_pooled_browser:
             if pooled_browser:
@@ -76,17 +82,41 @@ class WebDriver(WebDriverMixin, Remote):
 atexit.register(WebDriver._at_exit)
 
 
-class Firefox(WebDriverMixin, Firefox):
+class Firefox(WebDriverMixin, _Firefox):
     pass
 
 
-class Chrome(WebDriverMixin, Chrome):
+class Chrome(WebDriverMixin, _Chrome):
     pass
 
 
-class Ie(WebDriverMixin, Ie):
+class Ie(WebDriverMixin, _Ie):
     pass
 
 
-class Remote(WebDriverMixin, Remote):
+class Remote(WebDriverMixin, _Remote):
     pass
+
+
+class HtmlUnit(WebDriverMixin, _Remote):
+    def __init__(self, *args, **kwargs):
+        super(HtmlUnit, self).__init__("http://localhost:4444/wd/hub",
+                                       DesiredCapabilities.HTMLUNIT)
+
+    def _create_web_element(self, element_id):
+        return HtmlUnitWebElement(self, element_id)
+
+
+class HtmlUnitWebElement(WebElement):
+    def descendants(self):
+        # HtmlUnit adds self into descendants
+        ret = super(HtmlUnitWebElement, self).descendants()
+        ret.discard(self)
+        return ret
+
+    @property
+    def inner_html(self):
+        # Need to use JS to do inner_html with HtmlUnit.
+        script = "return arguments[0].innerHTML;"
+        return self._parent.execute_script(script, self)
+

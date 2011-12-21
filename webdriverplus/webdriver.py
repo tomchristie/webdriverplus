@@ -9,13 +9,12 @@ from selenium.common.exceptions import StaleElementReferenceException
 
 
 class WebDriverMixin(SelectorMixin):
-    def __init__(self, reuse_browser=False, quit_on_exit=True,
-                 *args, **kwargs):
-        super(WebDriverMixin, self).__init__(*args, **kwargs)
-        self.reuse_browser = reuse_browser
-        self.quit_on_exit = quit_on_exit
+    def __init__(self, *args, **kwargs):
+        self.reuse_browser = kwargs.pop('reuse_browser', False)
+        self.quit_on_exit = kwargs.pop('quit_on_exit', False)
         self._highlighted = None
         self._has_quit = False
+        super(WebDriverMixin, self).__init__(*args, **kwargs)
 
     def quit(self, force=False):
         if self._has_quit:
