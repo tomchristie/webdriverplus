@@ -15,3 +15,8 @@ of ``webdriver``:
 
     List incompatible changes.
     Explain relation between base classes in each.
+
+.. note::
+
+    If you're migrating from ``webdriver`` to ``webdriverplus``, please
+    consider making a note of any issues you come across, and letting me know.

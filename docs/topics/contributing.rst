@@ -11,7 +11,7 @@ Contributions and bug reports are always welcome.
 Requirements
 ------------
 
-If you are using a git clone of the project, rather than a `pip install`,
+If you are using a git clone of the project, rather than a ``pip install``,
 you'll need to make sure you've installed ``selenium``.
 
 ``pip install selenium``
