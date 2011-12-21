@@ -23,10 +23,12 @@ What's so great about WebDriver Plus?
 * Perform actions on elements without having to use ActionChains.
 * Element highlighting makes working from the Python console a joy.
 
+`Help contribute on GitHub! <https://github.com/tomchristie/webdriverplus>`_
+
 .. note::
     WebDriver Plus is not yet ready for use.
     It is in active development.
-    Contributions welcome!
+
 
 Getting started
 ---------------

@@ -3,8 +3,11 @@
 Filtering
 =========
 
-.filter(*selector*)
--------------------
+The `filter()` and `exclude()` methods can be used to filter the elements in
+a WebElementSet.
+
+filter(*selector*)
+------------------
 
 Filters the ``WebElementSet`` to only include elements that match the selector.
 
@@ -19,15 +22,14 @@ Filters the ``WebElementSet`` to only include elements that match the selector.
     ...     <li>4</li>
     ...     <li class="selected">5</li>
     ... </ul>"""
-    >>> driver.open(snippet).find('li').filter('.selected')
+    >>> elems = WebDriver().open(snippet).find('li').filter('.selected')
     WebElementSet(
       <li class="selected">2</li>
       <li class="selected">5</li>
     )
 
-
-.exclude(*selector*)
---------------------
+exclude(*selector*)
+-------------------
 
 Filters the ``WebElementSet`` to only include elements that do not match the
 selector.
@@ -49,10 +51,3 @@ selector.
       <li>3</li>
       <li>4</li>
     )
-
-.closest(*selector*)
---------------------
-
-.. note::
-
-    Add support for .closest()

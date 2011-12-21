@@ -3,8 +3,24 @@
 Traversing
 ==========
 
-children
---------
+WebDriverPlus supports a large set of JQuery style DOM traversal methods.
+These help you to you easily target the parts of the web page you're interested
+in.
+
+Traversal methods in WebDriver Plus can be called without any arguments:
+
+.. code-block:: python
+
+    >>> elems.children()
+
+Or they can be filtered by one or more selectors:
+
+.. code-block:: python
+
+    >>> elems.children('input', type='checkbox')
+
+children(*selector*)
+--------------------
 
 Get the children of each element in the set of matched elements, optionally
 filtered by a selector.
@@ -25,8 +41,8 @@ filtered by a selector.
       <li>3</li>
     )
 
-parent
-------
+parent(*selector*)
+------------------
 
 Get the parent of each element in the current set of matched elements,
 optionally filtered by a selector.
@@ -45,8 +61,8 @@ optionally filtered by a selector.
       <li><strong>2</strong></li>
     )
 
-descendants
------------
+descendants()
+-------------
 
 Get the descendants of each element in the current set of matched elements.
 
@@ -70,10 +86,11 @@ Get the descendants of each element in the current set of matched elements.
 .. note::
 
     Unlike the other traversal operations ``.descendants()`` cannot be
-    filtered by a selector.  Use ``.find()`` instead.
+    filtered by a selector.  You should use ``.find()`` instead, which is
+    equivelent to filtering against all descendants.
 
-ancestors
----------
+ancestors(*selector*)
+---------------------
 
 Get the ancestors of each element in the current set of matched elements,
 optionally filtered by a selector.
@@ -94,8 +111,8 @@ optionally filtered by a selector.
       <ul> <li>1</li> <li class="selected">2</li> <li>3</li> </ul>
     )
 
-next
-----
+next(*selector*)
+----------------
 
 Get the immediately following sibling of each element in the set of matched
 elements, optionally filtered by a selector.
@@ -116,8 +133,8 @@ elements, optionally filtered by a selector.
       <li>4</li>
     )
 
-prev
-----
+prev(*selector*)
+----------------
 
 Get the immediately preceding sibling of each element in the set of matched
 elements, optionally filtered by a selector.
@@ -138,8 +155,8 @@ elements, optionally filtered by a selector.
       <li>2</li>
     )
 
-next_all
---------
+next_all(*selector*)
+--------------------
 
 Get all following siblings of each element in the set of matched elements,
 optionally filtered by a selector.
@@ -161,8 +178,8 @@ optionally filtered by a selector.
       <li>5</li>
     )
 
-prev_all
---------
+prev_all(*selector*)
+--------------------
 
 Get all preceding siblings of each element in the set of matched elements,
 optionally filtered by a selector.
@@ -184,8 +201,8 @@ optionally filtered by a selector.
       <li>2</li>
     )
 
-siblings
---------
+siblings(*selector*)
+--------------------
 
 Get the siblings of each element in the set of matched elements, optionally
 filtered by a selector.
@@ -208,3 +225,10 @@ filtered by a selector.
       <li>4</li>
       <li>5</li>
     )
+
+closest(*selector*)
+-------------------
+
+.. note::
+
+    Add support for .closest()
