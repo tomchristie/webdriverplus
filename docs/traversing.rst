@@ -3,7 +3,7 @@
 Traversing
 ==========
 
-WebDriverPlus supports a large set of JQuery style DOM traversal methods.
+WebDriver Plus supports a large set of JQuery style DOM traversal methods.
 These help you to you easily target the parts of the web page you're interested
 in.
 
@@ -225,10 +225,3 @@ filtered by a selector.
       <li>4</li>
       <li>5</li>
     )
-
-closest(*selector*)
--------------------
-
-.. note::
-
-    Add support for .closest()

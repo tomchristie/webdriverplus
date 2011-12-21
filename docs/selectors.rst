@@ -106,16 +106,6 @@ link_text
 link_text_contains
 ~~~~~~~~~~~~~~~~~~
 
-label_text
-~~~~~~~~~~
-
-**TODO**
-
-label_text_contains
-~~~~~~~~~~~~~~~~~~~
-
-**TODO**
-
 attribute
 ~~~~~~~~~
 
