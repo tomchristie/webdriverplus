@@ -3,6 +3,11 @@
 Inspection & Manipulation
 =========================
 
+.. note::
+
+    Some changes to be made here - slim down the number of methods,
+    be more consistent.
+
 .style
 ------
 
@@ -51,13 +56,13 @@ Returns the location of the element in the canvas, as a ``namedtuple``.
 
 Returns ``True`` if the checkbox has a ``checked`` attribute, ``False`` otherwise.
 
-    >>> import webdriverplus
+    >>> from webdriverplus import WebDriver
     >>> snippet = """
     ... <input type="checkbox" name="vehicle" value="Walk" />I walk to work</input>
     ... <input type="checkbox" name="vehicle" value="Cycle" checked />I cycle to work</input>
     ... <input type="checkbox" name="vehicle" value="Drive" />I drive to work</input>
     ... """
-    >>> driver = webdriverplus.Firefox().open(snippet)
+    >>> driver = WebDriver().open(snippet)
     >>> driver.find(value='Walk').is_checked
     False
     >>> driver.find(value='Cycle').is_checked
@@ -68,7 +73,7 @@ Returns ``True`` if the checkbox has a ``checked`` attribute, ``False`` otherwis
 
 Returns ``True`` if the option has a ``selected`` attribute, ``False`` otherwise.
 
-    >>> import webdriverplus
+    >>> from webdriverplus import WebDriver
     >>> snippet = """
     ... <select>
     ...     <option selected>Walk</option>
@@ -76,7 +81,7 @@ Returns ``True`` if the option has a ``selected`` attribute, ``False`` otherwise
     ...    <option>Driver</option>
     ... </select>
     ... """
-    >>> driver = webdriverplus.Firefox().open(snippet)
+    >>> driver = WebDriver().open(snippet)
     >>> driver.find(text='Walk').is_selected
     True
     >>> driver.find(text='Cycle').is_selected
