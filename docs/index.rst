@@ -99,12 +99,3 @@ Topics
 
   topics/migrating
   topics/contributing
-
-API Reference
--------------
-
-.. toctree::
-  :maxdepth: 1
-
-  api/webdriver
-  api/webelementset
