@@ -7,7 +7,7 @@ from webdriverplus.webdriver import WebDriverMixin
 import atexit
 import urllib2
 
-VERSION = (0, 0, 3, 'dev')
+VERSION = (0, 0, 3, 'final')
 
 assert(VERSION[3] in ('dev', 'final'))
 

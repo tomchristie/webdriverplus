@@ -23,4 +23,5 @@ setup(
     packages=[PACKAGE],
     package_dir={PACKAGE: PACKAGE},
     test_suite='runtests.main',
+    requires=['selenium']
 )
