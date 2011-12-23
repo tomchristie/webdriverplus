@@ -13,8 +13,8 @@ To create a WebDriver browser instance:
     from webdriverplus import WebDriver
     browser = WebDriver('firefox')
 
-Currently supported browsers are ``firefox``, ``chrome``, ``ie`` and
-``remote``.
+Currently supported browsers are ``firefox``, ``chrome``, ``ie``, ``htmlunit``,
+ and ``remote``.
 
 The default browser is firefox.  If called without any arguments,
 ``WebDriver()`` will create a firefox instance.

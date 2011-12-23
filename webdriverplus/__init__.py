@@ -3,10 +3,16 @@ from selenium.webdriver.firefox.webdriver import WebDriver as _Firefox
 from selenium.webdriver.chrome.webdriver import WebDriver as _Chrome
 from selenium.webdriver.ie.webdriver import WebDriver as _Ie
 from selenium.webdriver.remote.webdriver import WebDriver as _Remote
+
+from webdriverplus.utils import _download
 from webdriverplus.webdriver import WebDriverMixin
 from webdriverplus.webelement import WebElement
 
 import atexit
+import os
+import socket
+import subprocess
+import time
 import urllib2
 
 VERSION = (0, 0, 4, 'dev')
@@ -24,10 +30,14 @@ def get_version():
 class WebDriver(WebDriverMixin):
     _pool = {}  # name -> (instance, signature)
     _quit_on_exit = set()  # set of instances
+    _selenium_server = None  # Popen object
     _default_browser = 'firefox'
 
     @classmethod
     def _at_exit(cls):
+        if cls._selenium_server:
+            cls._selenium_server.kill()
+
         for driver in cls._quit_on_exit:
             try:
                 driver.quit(force=True)
@@ -99,12 +109,63 @@ class Remote(WebDriverMixin, _Remote):
 
 
 class HtmlUnit(WebDriverMixin, _Remote):
+    _selenium = 'selenium-server-standalone-2.15.0.jar'
+    _selenium_url = 'http://selenium.googlecode.com/files/' + _selenium
+    _auto_install = True
+
     def __init__(self, *args, **kwargs):
+        self._perform_auto_install()
+        self._autorun_selenium_server()
         super(HtmlUnit, self).__init__("http://localhost:4444/wd/hub",
                                        DesiredCapabilities.HTMLUNIT)
 
     def _create_web_element(self, element_id):
         return HtmlUnitWebElement(self, element_id)
+
+    def _get_webdriver_dir(self):
+        directory = os.path.expanduser('~/.webdriverplus')
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        return directory
+
+    def _get_selenium_path(self):
+        return self._get_webdriver_dir() + '/' + self._selenium
+
+    def _perform_auto_install(self):
+        if not self._auto_install:
+            return
+
+        selenium_server = self._get_selenium_path()
+        if not os.path.exists(selenium_server):
+            _download(self._selenium_url, selenium_server)
+
+    def _autorun_selenium_server(self):
+        if WebDriver._selenium_server:
+            return
+
+        if subprocess.call(['hash', 'java']) != 0:
+            raise Exception('java does not appear to be installed.')
+
+        fnull = open(os.devnull, 'w')
+        args = ['java', '-jar', self._get_selenium_path()]
+        WebDriver._selenium_server = subprocess.Popen(args, stdout=fnull, stderr=fnull)
+
+        now = time.time()
+        timeout = 10
+        connected = False
+        while time.time() - now < timeout:
+            try:
+                sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                sock.connect(('127.0.0.1', 4444))
+            except:
+                time.sleep(0.2)
+            else:
+                sock.close()
+                connected = True
+                break
+
+        if not connected:
+            raise Exception('Could not connect to selenium server')
 
 
 class HtmlUnitWebElement(WebElement):
