@@ -22,7 +22,7 @@ run_slow_tests = '--all' in sys.argv
 class WebDriverPlusTests(unittest.TestCase):
     def setUp(self):
         super(WebDriverPlusTests, self).setUp()
-        self.driver = webdriverplus.WebDriver('chrome', reuse_browser=True)
+        self.driver = webdriverplus.WebDriver('firefox', reuse_browser=True)
 
     def tearDown(self):
         self.driver.quit()
