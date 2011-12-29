@@ -14,7 +14,7 @@ To create a WebDriver browser instance:
     browser = WebDriver('firefox')
 
 Currently supported browsers are ``firefox``, ``chrome``, ``ie``, ``htmlunit``,
- and ``remote``.
+and ``remote``.
 
 The default browser is firefox.  If called without any arguments,
 ``WebDriver()`` will create a firefox instance.
