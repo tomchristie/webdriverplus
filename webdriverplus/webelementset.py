@@ -212,3 +212,10 @@ class WebElementSet(SelectorMixin, OrderedSet):
         for elem in self:
             ret |= elem.siblings()
         return ret.filter(*args, **kwargs)
+
+    def __getitem__(self, key):
+        if isinstance(key, slice):
+            elems = list(self)[key]
+        else:
+            elems = [list(self)[key]]
+        return WebElementSet(self._webdriver, elems)

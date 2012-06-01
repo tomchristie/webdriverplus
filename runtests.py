@@ -200,6 +200,20 @@ class TraversalTests(WebDriverPlusTests):
                      </html>"""
         self.driver.open(snippet)
 
+    def test_indexing(self):
+        elem = self.driver.find('ul').children()[0]
+        self.assertEquals(elem.html, '<li>1</li>')
+
+    def test_slicing(self):
+        elems = self.driver.find('ul').children()[0:-1]
+        expected = [
+            '<li>1</li>',
+            '<li>2</li>',
+            '<li class="selected">3</li>',
+            '<li>4</li>'
+        ]
+        self.assertEquals([elem.html for elem in elems], expected)
+
     def test_children(self):
         nodes = self.driver.find('ul').children()
         text = [node.text for node in nodes]
