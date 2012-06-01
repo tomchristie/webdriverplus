@@ -109,9 +109,9 @@ class WebDriverMixin(SelectorMixin):
         Shortcut to open from text.
         """
         if not re.match("[^<]*<(html|doctype)", content, re.IGNORECASE):
-            content = '<html>%s</html>' % content
+            content = '<html><head><meta charset="utf-8"></head>%s</html>' % content
         with tempfile.NamedTemporaryFile() as temp:
-            temp.write(content)
+            temp.write(content.encode('utf-8'))
             temp.flush()
             return self.get('file://' + temp.name)
 

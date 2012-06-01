@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding: utf-8
 
 import sys
 import unittest
@@ -62,6 +63,10 @@ class DriverTests(WebDriverPlusTests):
         self.assertEquals(self.driver.page_text,  page_text)
 
     def test_find(self):
+        self.driver.open(u'<h1>123</h1><h2>☃</h2><h3>789</h3>')
+        self.assertEquals(self.driver.find('h2').text, u'☃')
+
+    def test_unicode(self):
         self.driver.open('<h1>123</h1><h2>456</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, '456')
 

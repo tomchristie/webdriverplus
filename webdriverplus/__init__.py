@@ -35,6 +35,9 @@ class WebDriver(WebDriverMixin):
 
     @classmethod
     def _at_exit(cls):
+        """
+        Gets registered to run on system exit.
+        """
         if cls._selenium_server:
             cls._selenium_server.kill()
 
@@ -50,7 +53,6 @@ class WebDriver(WebDriverMixin):
         return cls._pool.get(browser, (None, (None, None)))
 
     def __new__(cls, browser=None, *args, **kwargs):
-
         browser = browser or cls._default_browser
         quit_on_exit = kwargs.get('quit_on_exit', True)
         reuse_browser = kwargs.get('reuse_browser')
@@ -180,4 +182,3 @@ class HtmlUnitWebElement(WebElement):
         # Need to use JS to do inner_html with HtmlUnit.
         script = "return arguments[0].innerHTML;"
         return self._parent.execute_script(script, self)
-
