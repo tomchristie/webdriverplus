@@ -319,16 +319,16 @@ class InspectionTests(WebDriverPlusTests):
 
     def test_get_style_inline(self):
         elem = self.driver.find('ul')
-        self.assertEquals(elem.style.color, '#0000ff')
+        self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0,0,255,1)'))
 
     def test_get_style_css(self):
         elem = self.driver.find('.selected')
-        self.assertEquals(elem.style.color, '#ff0000')
+        self.assertTrue(elem.style.color, ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255,0,0,1)'))
 
     def test_set_style(self):
         elem = self.driver.find('.selected')
         elem.style.color = 'green'
-        self.assertEquals(elem.style.color, '#008000')
+        self.assertTrue(elem.style.color in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0,128,0,1)'))
 
     def test_size(self):
         elem = self.driver.find('img')

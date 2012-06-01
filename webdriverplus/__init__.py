@@ -117,9 +117,9 @@ class HtmlUnit(WebDriverMixin, _Remote):
 
     def __init__(self, *args, **kwargs):
         self._perform_auto_install()
-        self._autorun_selenium_server()
+        #self._autorun_selenium_server()
         super(HtmlUnit, self).__init__("http://localhost:4444/wd/hub",
-                                       DesiredCapabilities.HTMLUNIT)
+                                       DesiredCapabilities.HTMLUNIT, **kwargs)
 
     def _create_web_element(self, element_id):
         return HtmlUnitWebElement(self, element_id)

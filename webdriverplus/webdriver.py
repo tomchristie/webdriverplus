@@ -20,9 +20,9 @@ class WebDriverMixin(SelectorMixin):
         if self._has_quit:
             return
         if self.reuse_browser and not force:
-            alert = self.alert
-            if alert:
-                alert.dismiss()
+            # alert = self.alert
+            # if alert:
+            #     alert.dismiss()
             return
         super(WebDriverMixin, self).quit()
         self._has_quit = True
