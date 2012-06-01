@@ -1,3 +1,4 @@
+from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.remote.webelement import WebElement as _WebElement
 #from selenium.webdriver.common.action_chains import ActionChains
 
@@ -213,14 +214,17 @@ class WebElement(SelectorMixin, _WebElement):
         #ActionChains(self._parent).move_to_element(self).perform()
 
     def __repr__(self):
-        ret = self.html
-        ret = ' '.join(ret.split())
-        if len(ret) > 78:
-            ret = ret[:75] + '...'
-        #self.style.backgroundColor = '#f9edbe'
-        #self.style.borderColor = '#f9edbe'
-        #self.style.outline = '1px solid black'
-        return ret.encode('utf-8')
+        try:
+            ret = self.html
+            ret = ' '.join(ret.split())
+            if len(ret) > 78:
+                ret = ret[:75] + '...'
+            #self.style.backgroundColor = '#f9edbe'
+            #self.style.borderColor = '#f9edbe'
+            #self.style.outline = '1px solid black'
+            return ret.encode('utf-8')
+        except StaleElementReferenceException:
+            return '<StaleElement>'
 
     def __hash__(self):
         return hash(self._id)
