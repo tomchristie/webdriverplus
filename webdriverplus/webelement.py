@@ -220,7 +220,7 @@ class WebElement(SelectorMixin, _WebElement):
         #self.style.backgroundColor = '#f9edbe'
         #self.style.borderColor = '#f9edbe'
         #self.style.outline = '1px solid black'
-        return ret
+        return ret.encode('utf-8')
 
     def __hash__(self):
         return hash(self._id)
