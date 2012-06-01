@@ -111,7 +111,7 @@ class Remote(WebDriverMixin, _Remote):
 
 
 class HtmlUnit(WebDriverMixin, _Remote):
-    _selenium = 'selenium-server-standalone-2.15.0.jar'
+    _selenium = 'selenium-server-standalone-2.22.0.jar'
     _selenium_url = 'http://selenium.googlecode.com/files/' + _selenium
     _auto_install = True
 
