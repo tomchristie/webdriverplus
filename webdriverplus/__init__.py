@@ -15,7 +15,7 @@ import subprocess
 import time
 import urllib2
 
-VERSION = (0, 0, 4, 'dev')
+VERSION = (0, 0, 4, 'final')
 
 assert(VERSION[3] in ('dev', 'final'))
 

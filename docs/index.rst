@@ -24,13 +24,6 @@ What's so great about WebDriver Plus?
 * Element highlighting makes working from the Python console a joy.
 * Supports headless mode using HtmlUnit.
 
-.. note::
-    WebDriver Plus is currently in alpha.
-
-    It's probably good enough to start
-    using now, but be aware that APIs are still subject to change, and that
-    the codebase is still being very actively worked on.
-
 `Help contribute on GitHub <https://github.com/tomchristie/webdriverplus>`_.
 
 
