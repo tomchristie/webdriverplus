@@ -1,3 +1,4 @@
+import os
 import urllib2
 
 
@@ -24,3 +25,31 @@ def _download(url, filename):
 
     print chr(8) + 'Done' + ' ' * (len(status) + 1)
     f.close()
+
+
+# http://stackoverflow.com/questions/566746/how-to-get-console-window-width-in-python
+def get_terminal_size():
+    def ioctl_GWINSZ(fd):
+        try:
+            import fcntl
+            import struct
+            import termios
+            cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ,
+        '1234'))
+        except:
+            return None
+        return cr
+    cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+    if not cr:
+        try:
+            fd = os.open(os.ctermid(), os.O_RDONLY)
+            cr = ioctl_GWINSZ(fd)
+            os.close(fd)
+        except:
+            pass
+    if not cr:
+        try:
+            cr = (os.environ['LINES'], os.environ['COLUMNS'])
+        except:
+            cr = (25, 80)
+    return int(cr[1]), int(cr[0])

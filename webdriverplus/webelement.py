@@ -3,7 +3,11 @@ from selenium.webdriver.remote.webelement import WebElement as _WebElement
 #from selenium.webdriver.common.action_chains import ActionChains
 
 from webdriverplus.selectors import SelectorMixin
+from webdriverplus.utils import get_terminal_size
 from webdriverplus.wrappers import Style, Attributes, Size, Location
+
+import os
+import sys
 
 
 # http://stackoverflow.com/questions/6157929/how-to-simulate-mouse-click-using-javascript/6158050#6158050
@@ -215,14 +219,24 @@ class WebElement(SelectorMixin, _WebElement):
 
     def __repr__(self):
         try:
+            if os.isatty(sys.stdin.fileno()):
+                try:
+                    width = get_terminal_size()[0]
+                except:
+                    width = 80
+            else:
+                width = 80
+
             ret = self.html
             ret = ' '.join(ret.split())
-            if len(ret) > 78:
-                ret = ret[:75] + '...'
+            ret = ret.encode('utf-8')
+
+            if len(ret) >= width - 2:
+                ret = ret[:width - 5] + '...'
             #self.style.backgroundColor = '#f9edbe'
             #self.style.borderColor = '#f9edbe'
             #self.style.outline = '1px solid black'
-            return ret.encode('utf-8')
+            return ret
         except StaleElementReferenceException:
             return '<StaleElement>'
 
