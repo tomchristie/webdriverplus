@@ -18,12 +18,13 @@ import webdriverplus
 # No such element exceptions need to be cleaner
 
 run_slow_tests = '--all' in sys.argv
+browser = 'firefox'
 
 
 class WebDriverPlusTests(unittest.TestCase):
     def setUp(self):
         super(WebDriverPlusTests, self).setUp()
-        self.driver = webdriverplus.WebDriver('firefox', reuse_browser=True)
+        self.driver = webdriverplus.WebDriver(browser, reuse_browser=True)
 
     def tearDown(self):
         self.driver.quit()
@@ -508,4 +509,13 @@ if __name__ == '__main__':
         sys.argv.remove('--all')
     except:
         pass
+
+    try:
+        idx = sys.argv.index('--browser')
+        browser = sys.argv[idx + 1]
+        sys.argv.pop(idx)
+        sys.argv.pop(idx)
+    except:
+        pass
+
     unittest.main()
