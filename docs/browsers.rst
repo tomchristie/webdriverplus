@@ -83,3 +83,11 @@ will not be returned to the browser pool:
 .. code-block:: python
 
     browser.quit(force=True)
+
+Supported browsers
+------------------
+
+* Firefox - Should run out-of-the-box.
+* Chrome - Install the `chrome driver <http://code.google.com/p/selenium/wiki/ChromeDriver>`_ first.
+* IE - Install the `IE driver <http://code.google.com/p/selenium/wiki/InternetExplorerDriver>`_ first.
+* HTMLUnit (headless browser) - should auto-install and run out-of-the-box.

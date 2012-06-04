@@ -18,7 +18,8 @@ Returns an object that lets you get and set the CSS style of an element.
     >>> import webdriverplus
     >>> driver = webdriverplus.Firefox()
     >>> driver.get('http://www.google.com')
-    >>> driver.find_all('input').style.background = 'green'
+    >>> for elem in driver.find('input'):
+    >>>     elem.style.background = 'green'
     >>> driver.find('body').style.background = 'red'
 
 .size

@@ -15,16 +15,11 @@ import subprocess
 import time
 import urllib2
 
-VERSION = (0, 0, 4, 'final')
-
-assert(VERSION[3] in ('dev', 'final'))
+VERSION = (0, 1, 0)
 
 
 def get_version():
-    ret = '%d.%d.%d' % (VERSION[0], VERSION[1], VERSION[2])
-    if VERSION[3] == 'dev':
-        ret += '-dev'
-    return ret
+    return '%d.%d.%d' % (VERSION[0], VERSION[1], VERSION[2])
 
 
 class WebDriver(WebDriverMixin):
