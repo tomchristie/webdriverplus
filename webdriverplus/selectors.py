@@ -26,9 +26,9 @@ class SelectorMixin(object):
             lambda self, val: (By.CLASS_NAME, val),
         'css':
             lambda self, val: (By.CSS_SELECTOR, val),
-        'link':
+        'link_text':
             lambda self, val: (By.LINK_TEXT, val),
-        'link_contains':
+        'link_text_contains':
             lambda self, val: (By.PARTIAL_LINK_TEXT, val),
         'attribute':
             lambda self, val: (By.XPATH, '%s[@%s]' % (self._xpath_prefix, val)),
