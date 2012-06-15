@@ -131,13 +131,13 @@ class SelectorTests(WebDriverPlusTests):
         node = self.driver.find(xpath='//ul/li[@class="selected"]')
         self.assertEquals(node.text, 'three')
 
-    def test_link(self):
-        node = self.driver.find(link='four')
+    def test_link_text(self):
+        node = self.driver.find(link_text='four')
         self.assertEquals(node.tag_name, 'a')
         self.assertEquals(node.text, 'four')
 
-    def test_link_contains(self):
-        node = self.driver.find(link_contains='ou')
+    def test_link_text_contains(self):
+        node = self.driver.find(link_text_contains='ou')
         self.assertEquals(node.tag_name, 'a')
         self.assertEquals(node.text, 'four')
 
