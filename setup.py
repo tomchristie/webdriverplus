@@ -21,6 +21,10 @@ if sys.argv[-1] == 'publish':
     print "  git push --tags"
     sys.exit()
 
+f = open('requirements.txt', 'r')
+lines = f.readlines()
+requirements = [l.strip().strip('\n') for l in lines if l.strip() and not l.strip().startswith('#')]
+
 setup(
     name=PACKAGE,
     version=version_str,
@@ -30,6 +34,7 @@ setup(
     author='Tom Christie',
     packages=[PACKAGE],
     package_dir={PACKAGE: PACKAGE},
+    include_package_data=True,
     test_suite='runtests.main',
-    requires=['selenium']
+    install_requires=requirements,
 )
