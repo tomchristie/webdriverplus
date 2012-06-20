@@ -75,7 +75,7 @@ class SelectorMixin(object):
 
         elems = None
         for selector, value in self._get_selector(**kwargs):
-            if elems:
+            if elems is not None:
                 other = self.find_elements(by=selector, value=value)
                 elems &= other
             else:
