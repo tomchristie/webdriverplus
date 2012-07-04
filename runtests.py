@@ -102,6 +102,11 @@ class SelectorTests(WebDriverPlusTests):
         node = self.driver.find('li', text='one')
         self.assertEquals(node.html, '<li>one</li>')
 
+    # regression test
+    def test_multiple_selectors_one_empty(self):
+        node = self.driver.find('li', text="foo")
+        self.assertFalse(node)
+
     def test_multiple_named_selectors(self):
         node = self.driver.find(tag_name='li', text='one')
         self.assertEquals(node.html, '<li>one</li>')
