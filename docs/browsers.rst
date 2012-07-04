@@ -91,3 +91,30 @@ Supported browsers
 * Chrome - Install the `chrome driver <http://code.google.com/p/selenium/wiki/ChromeDriver>`_ first.
 * IE - Install the `IE driver <http://code.google.com/p/selenium/wiki/InternetExplorerDriver>`_ first.
 * HTMLUnit (headless browser) - should auto-install and run out-of-the-box.
+
+
+Headless mode using Xvfb or Xvnc
+--------------------------------
+
+Using `pyvirtualdisplay <http://pypi.python.org/pypi/PyVirtualDisplay>`_, you
+can run real browser instances in a virtual X framebuffer or VNC session. This
+enables you to run Firefox or Chrome tests in headless mode, without having to
+install HTMLUnit.
+
+.. code-block:: bash
+
+    $ pip install pyvirtualdisplay
+
+You need to install either `Xvfb
+<http://www.x.org/releases/X11R7.6/doc/man/man1/Xvfb.1.xhtml>`_ or `Xvnc
+<http://xvnc.sourceforge.net/>`_ as a backend for `pyvirtualdisplay`.
+
+To run the headless tests, use the ``--headless`` argument::
+
+    $ python runtests.py --headless
+    Running tests in headless mode.
+    .........................................................
+    ----------------------------------------------------------------------
+    Ran 57 tests in 7.715s
+
+    OK

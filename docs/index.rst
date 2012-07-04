@@ -22,7 +22,7 @@ What's so great about WebDriver Plus?
   complex xpath expressions.
 * Perform actions directly on elements without having to use ActionChains.
 * Element highlighting makes working from the Python console a joy.
-* Supports headless mode using HtmlUnit.
+* Supports headless mode using HtmlUnit, Xvfb or Xvnc.
 
 `Help contribute on GitHub <https://github.com/tomchristie/webdriverplus>`_.
 
