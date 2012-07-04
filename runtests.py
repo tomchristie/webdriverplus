@@ -102,14 +102,21 @@ class SelectorTests(WebDriverPlusTests):
         node = self.driver.find('li', text='one')
         self.assertEquals(node.html, '<li>one</li>')
 
-    # regression test
-    def test_multiple_selectors_one_empty(self):
-        node = self.driver.find('li', text="foo")
-        self.assertFalse(node)
+    def test_nonexistant_multiple_selectors(self):
+        """If a combination of selector doesn't match one or more
+        elements, none should be returned."""
+        nodes = self.driver.find('li', text='fubar')
+        self.assertFalse(nodes)
 
     def test_multiple_named_selectors(self):
         node = self.driver.find(tag_name='li', text='one')
         self.assertEquals(node.html, '<li>one</li>')
+
+    def test_nonexistant_multiple_named_selectors(self):
+        """If a combination of named selector doesn't match one or more
+        elements, none should be returned."""
+        nodes = self.driver.find(tag_name='li', text='fubar')
+        self.assertFalse(nodes)
 
     def test_id(self):
         node = self.driver.find(id='mylist')
