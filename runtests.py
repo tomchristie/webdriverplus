@@ -530,4 +530,29 @@ if __name__ == '__main__':
     except:
         pass
 
+    # If --headless argument is given, run headless in virtual session
+    # using Xvfb or Xvnc.
+    try:
+        sys.argv.remove('--headless')
+    except ValueError:
+        pass
+    else:
+        try:
+            from pyvirtualdisplay import Display
+            from easyprocess import EasyProcessCheckInstalledError
+        except ImportError:
+            print 'Error: --headless mode requires pyvirtualdisplay'
+            sys.exit(2)
+        try:
+            display = Display(visible=0, size=(800, 600))
+        except EasyProcessCheckInstalledError:
+            print ('Error: Could not initialize virtual display. '
+                   'Is either Xvfb or Xvnc installed?')
+            sys.exit(2)
+        print 'Running tests in headless mode.'
+        display.start()
+
     unittest.main()
+
+    if 'display' in locals():
+        display.stop()
