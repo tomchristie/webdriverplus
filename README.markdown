@@ -1,6 +1,8 @@
 WebDriver Plus
 ==============
 
+[![Build Status](https://secure.travis-ci.org/tomchristie/webdriverplus.png?branch=master)](http://travis-ci.org/tomchristie/webdriverplus)
+
 The most simple and powerful way to use Selenium with Python
 ------------------------------------------------------------
 
