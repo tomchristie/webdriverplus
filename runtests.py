@@ -505,6 +505,26 @@ class ActionTests(WebDriverPlusTests):
         self.driver.open(snippet).find('a').move_to()
         self.assertEquals(self.driver.find(id='msg').text, 'mouse over')
 
+    def test_check_unchecked(self):
+        snippet = "<form><input type='checkbox' id='cbx'> Checkbox</form>"
+        self.driver.open(snippet).find('#cbx').check()
+        self.assertEquals(self.driver.find('#cbx').get_attribute('checked'), 'true')
+
+    def test_check_checked(self):
+        snippet = "<form><input type='checkbox' id='cbx' checked='checked'> Checkbox</form>"
+        self.driver.open(snippet).find('#cbx').check()
+        self.assertEquals(self.driver.find('#cbx').get_attribute('checked'), 'true')
+
+    def test_uncheck_unchecked(self):
+        snippet = "<form><input type='checkbox' id='cbx'> Checkbox</form>"
+        self.driver.open(snippet).find('#cbx').uncheck()
+        self.assertEquals(self.driver.find('#cbx').get_attribute('checked'), None)
+
+    def test_uncheck_checked(self):
+        snippet = "<form><input type='checkbox' id='cbx' checked='checked'> Checkbox</form>"
+        self.driver.open(snippet).find('#cbx').uncheck()
+        self.assertEquals(self.driver.find('#cbx').get_attribute('checked'), None)
+
     #def test_submit(self):
     #    js = "document.getElementById('msg').innerHTML = 'submit'"
     #    snippet = "<div id='msg'></div><form onSubmit=\"%s\"><input></input></form>" % js

@@ -217,6 +217,14 @@ class WebElement(SelectorMixin, _WebElement):
         self._parent.execute_script(simulate_event('mouseover'), self)
         #ActionChains(self._parent).move_to_element(self).perform()
 
+    def check(self):
+        script = "arguments[0].checked = true; return arguments[0];"
+        self._parent.execute_script(script, self)
+
+    def uncheck(self):
+        script = "arguments[0].checked = false; return arguments[0];"
+        self._parent.execute_script(script, self)
+
     def __repr__(self):
         try:
             if os.isatty(sys.stdin.fileno()):
