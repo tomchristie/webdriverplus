@@ -218,12 +218,12 @@ class WebElement(SelectorMixin, _WebElement):
         #ActionChains(self._parent).move_to_element(self).perform()
 
     def check(self):
-        script = "arguments[0].checked = true; return arguments[0];"
-        self._parent.execute_script(script, self)
+        if not self.is_checked:
+            self.click()
 
     def uncheck(self):
-        script = "arguments[0].checked = false; return arguments[0];"
-        self._parent.execute_script(script, self)
+        if self.is_checked:
+            self.click()
 
     def __repr__(self):
         try:
