@@ -69,6 +69,14 @@ class WebElementSet(SelectorMixin, OrderedSet):
         self._first.move_to()
         return self
 
+    def check(self):
+        self._first.check()
+        return self
+
+    def uncheck(self):
+        self._first.uncheck()
+        return self
+
     def submit(self):
         self._first.submit()
         return self
