@@ -10,7 +10,7 @@ set, you should iterate over the set:
 .. code-block:: python
 
     for elem in browser.find('input', type='checkbox'):
-        elem.click()
+        elem.check()
 
 Actions return the original ``WebElementSet``, which means they can be chained.
 For example:
@@ -59,6 +59,16 @@ Holds down on an element.
 ----------
 
 Releases a held click.
+
+.check()
+----------
+
+Clicks a checkbox if it isn't already checked.
+
+.uncheck()
+----------
+
+Clicks a checkbox to uncheck it if it's checked.
 
 .submit()
 ---------
