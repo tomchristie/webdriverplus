@@ -1,4 +1,5 @@
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 def xpath_literal(s):
@@ -68,7 +69,16 @@ class SelectorMixin(object):
             assert func, "'%s' is not a valid selector argument." % arg
             yield func(self, value)  # (selector, value) tuple
 
-    def find(self, css=None, **kwargs):
+    def find(self, *args, **kwargs):
+        wait = getattr(self, 'wait', 0)
+        if wait:
+            return WebDriverWait(self, wait).until(
+                lambda selector: selector._find_nowait(*args, **kwargs)
+            )
+        else:
+            return self._find_nowait(*args, **kwargs)
+
+    def _find_nowait(self, css=None, **kwargs):
         if css:
             kwargs['css'] = css
         assert kwargs, 'no selector argument supplied.'
