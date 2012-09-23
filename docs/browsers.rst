@@ -86,7 +86,7 @@ we consider a low-level detail that the framework should deal with.
 Quitting browser instances
 --------------------------
 
-To quit a WebDriver broswer instance, call ``quit()``:
+To quit a WebDriver browser instance, call ``quit()``:
 
 .. code-block:: python
 
