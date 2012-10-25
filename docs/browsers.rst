@@ -64,10 +64,29 @@ If you do not want this behaviour set quit_on_exit to False:
 
     browser = WebDriver('firefox', quit_on_exit=False)
 
+wait
+~~~~
+
+By default WebDriverPlus will not wait for elements to become available. You can
+pass a ``wait`` argument to specify the number of seconds that ``find()`` should
+wait for elements to become available before timing out.
+
+.. code-block:: python
+
+    browser = WebDriver('firefox', wait=10)
+
+This uses WebDriverWait_ under the covers, but is much less verbose. The idea
+behind setting a per-browser wait argument instead of forcing the programmer to
+use ``WebDriverWait`` around each piece of code that needs to wait for an
+element is to free the programmer from having to think about waiting, which
+we consider a low-level detail that the framework should deal with.
+
+.. _WebDriverWait: http://seleniumhq.org/docs/04_webdriver_advanced.html
+
 Quitting browser instances
 --------------------------
 
-To quit a WebDriver broswer instance, call ``quit()``:
+To quit a WebDriver browser instance, call ``quit()``:
 
 .. code-block:: python
 

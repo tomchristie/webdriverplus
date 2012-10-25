@@ -12,6 +12,7 @@ class WebDriverMixin(SelectorMixin):
     def __init__(self, *args, **kwargs):
         self.reuse_browser = kwargs.pop('reuse_browser', False)
         self.quit_on_exit = kwargs.pop('quit_on_exit', False)
+        self.wait = kwargs.pop('wait', 0)
         self._highlighted = None
         self._has_quit = False
         super(WebDriverMixin, self).__init__(*args, **kwargs)

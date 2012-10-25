@@ -22,9 +22,12 @@ browser = 'firefox'
 
 
 class WebDriverPlusTests(unittest.TestCase):
+    extra_webdriver_kwargs = {}
+
     def setUp(self):
         super(WebDriverPlusTests, self).setUp()
-        self.driver = webdriverplus.WebDriver(browser, reuse_browser=True)
+        self.driver = webdriverplus.WebDriver(browser, reuse_browser=True,
+                                              **self.extra_webdriver_kwargs)
 
     def tearDown(self):
         self.driver.quit()
@@ -535,6 +538,50 @@ class ActionTests(WebDriverPlusTests):
     #    snippet = "<form onSubmit=\"alert('submit')\"><input></input></form>"
     #    self.driver.open(snippet).find('input').submit()
     #    self.assertEquals(self.driver.alert.text, 'submit')
+
+
+WAIT_SNIPPET = """<html>
+    <head>
+        <script type="text/javascript">
+addTextLater = function() {
+    setTimeout(addText, 100);
+}
+addText = function () {
+    var txtNode = document.createTextNode("Hello World!");
+    var p = document.getElementById("mypara");
+    p.appendChild(txtNode);
+}
+        </script>
+    </head>
+    <body onload="addTextLater();">
+        <p id="mypara"></p>
+    </body>
+</html>"""
+
+
+class WaitTests(WebDriverPlusTests):
+    extra_webdriver_kwargs = {'wait': 10}
+
+    def setUp(self):
+        super(WaitTests, self).setUp()
+        snippet = WAIT_SNIPPET
+        self.driver.open(snippet)
+
+    def test_element_added_after_load_found(self):
+        nodes = self.driver.find('p', text_contains='Hello World')
+        self.assertEquals(len(nodes), 1)
+
+
+class NoWaitTests(WebDriverPlusTests):
+    def setUp(self):
+        super(NoWaitTests, self).setUp()
+        snippet = WAIT_SNIPPET
+        self.driver.open(snippet)
+
+    def test_element_added_after_load_not_found(self):
+        nodes = self.driver.find('p', text_contains='Hello World')
+        self.assertEquals(len(nodes), 0)
+
 
 if __name__ == '__main__':
     try:
