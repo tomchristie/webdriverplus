@@ -85,6 +85,9 @@ class SelectorTests(WebDriverPlusTests):
                              <li>two</li>
                              <li class="selected">three</li>
                              <li><a href="#">four</a></li>
+                             <li><strong>hi</strong>five</li>
+                             <li>six<strong>hi</strong></li>
+                             <li><strong>seven</strong></li>
                              <span>one</span>
                          </ul>
                          <form>
@@ -162,9 +165,17 @@ class SelectorTests(WebDriverPlusTests):
         self.assertEquals(self.driver.find(text='three').index, 2)
 
     def test_text_contains(self):
-        self.assertEquals(self.driver.find(text_contains='ne').index, 0)
-        self.assertEquals(self.driver.find(text_contains='tw').index, 1)
-        self.assertEquals(self.driver.find(text_contains='hre').index, 2)
+        self.assertEquals(self.driver.find('li', text_contains='ne').index, 0)
+        self.assertEquals(self.driver.find('li', text_contains='tw').index, 1)
+        self.assertEquals(self.driver.find('li', text_contains='hre').index, 2)
+
+        self.assertEquals(len(self.driver.find(text_contains='ne')), 2)
+        self.assertEquals(len(self.driver.find(text_contains='tw')), 1)
+        self.assertEquals(len(self.driver.find(text_contains='hre')), 1)
+
+        self.assertEquals(len(self.driver.find('li', text_contains='ive')), 1)
+        self.assertEquals(len(self.driver.find('li', text_contains='ix')), 1)
+        self.assertEquals(len(self.driver.find('li', text_contains='eve')), 0)
 
     #def test_label(self):
     #    node = self.driver.find(label='Password:')
