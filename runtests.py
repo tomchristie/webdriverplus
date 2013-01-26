@@ -455,6 +455,19 @@ class ValueTests(WebDriverPlusTests):
         pass
 
 
+class InputTests(WebDriverPlusTests):
+    def setUp(self):
+        super(InputTests, self).setUp()
+        snippet = """<form>
+                         <input type="text" name="username" value="mike">
+                     </form>"""
+        self.driver.open(snippet)
+
+    def test_send_keys(self):
+        elem = self.driver.find('input')
+        elem.send_keys("hello")
+
+
 class SetTests(WebDriverPlusTests):
     def setUp(self):
         super(SetTests, self).setUp()
