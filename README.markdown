@@ -20,7 +20,7 @@ What's so great about WebDriver Plus?
 * Perform actions on elements without having to use ActionChains.
 * Element highlighting makes working from the Python console a joy.
 
-**WebDriver Plus is not yet ready for use. It is in active development. Contributions welcome!**
+**Note**: If you're interested in helping maintain WebDriver Plus in the long term please get in touch.  Most of the author's open source time is currently devoted to working on [Django REST framework][django-rest-framework].
 
 Getting started
 ---------------
@@ -69,3 +69,5 @@ When you're ready to get going, head over to the
 
 If you want to help contribute to the project, please read the
 [contribution notes](http://webdriver-plus.readthedocs.org/en/latest/topics/contributing.html).
+
+[django-rest-framework]: http://django-rest-framework.org/
