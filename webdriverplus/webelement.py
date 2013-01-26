@@ -77,17 +77,37 @@ def simulate_event(event, **options):
     simulate(arguments[0], "%s", %s);""" % (event, repr(options))
 
 
+class ParentProxy(object):
+    """ We want to use the name 'parent', for traversal, but this hides
+        the default WebElement property. We use a proxy so that _calling
+        parent does the traversal while allowing _WebElement to use parent
+        to access the WebDriver
+    """
+    def __init__(self, _webelement):
+        self._webelement = _webelement
+
+    def __call__(self, *args, **kwargs):
+        return self._webelement._traversal_parent(*args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._webelement._parent, name)
+
+
 class WebElement(SelectorMixin, _WebElement):
     @property
     def _xpath_prefix(self):
         return './/*'
 
-    # Traversal
-    def parent(self, *args, **kwargs):
+    @property
+    def parent(self):
         """
         Note: We're overriding the default WebElement.parent behaviour here.
         (Normally .parent is a property that returns the WebDriver object.)
         """
+        return ParentProxy(self)
+
+    # Traversal
+    def _traversal_parent(self, *args, **kwargs):
         ret = self.find(xpath='..')
         return ret.filter(*args, **kwargs)
 
