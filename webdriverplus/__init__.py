@@ -3,6 +3,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver as _Firefox
 from selenium.webdriver.chrome.webdriver import WebDriver as _Chrome
 from selenium.webdriver.ie.webdriver import WebDriver as _Ie
 from selenium.webdriver.remote.webdriver import WebDriver as _Remote
+from selenium.webdriver.phantomjs.webdriver import WebDriver as _PhantomJS
 
 from webdriverplus.utils import _download
 from webdriverplus.webdriver import WebDriverMixin
@@ -69,6 +70,8 @@ class WebDriver(WebDriverMixin):
             driver = Ie(*args, **kwargs)
         elif browser == 'remote':
             driver = Remote(*args, **kwargs)
+        elif browser == 'phantomjs':
+            driver = PhantomJS(*args, **kwargs)
         elif browser == 'htmlunit':
             driver = HtmlUnit(*args, **kwargs)
 
@@ -102,6 +105,10 @@ class Ie(WebDriverMixin, _Ie):
 
 
 class Remote(WebDriverMixin, _Remote):
+    pass
+
+
+class PhantomJS(WebDriverMixin, _PhantomJS):
     pass
 
 

@@ -13,8 +13,7 @@ To create a WebDriver browser instance:
     from webdriverplus import WebDriver
     browser = WebDriver('firefox')
 
-Currently supported browsers are ``firefox``, ``chrome``, ``ie``, ``htmlunit``,
-and ``remote``.
+Currently supported browsers are ``firefox``, ``chrome``, ``ie``, ``htmlunit``, ``remote`` and ``phantomjs``.
 
 The default browser is firefox.  If called without any arguments,
 ``WebDriver()`` will create a firefox instance.
@@ -110,6 +109,7 @@ Supported browsers
 * Chrome - Install the `chrome driver <http://code.google.com/p/selenium/wiki/ChromeDriver>`_ first.
 * IE - Install the `IE driver <http://code.google.com/p/selenium/wiki/InternetExplorerDriver>`_ first.
 * HTMLUnit (headless browser) - should auto-install and run out-of-the-box.
+* PhantomJS - Install `PhantomJS <http://phantomjs.org/download.html>`_ first.
 
 
 Headless mode using Xvfb or Xvnc
