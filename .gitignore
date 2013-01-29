@@ -1,6 +1,7 @@
 *.pyc
 *~
 chromedriver.log
+ghostdriver.log
 
 !.gitignore
 
