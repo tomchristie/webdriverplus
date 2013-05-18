@@ -334,6 +334,18 @@ class ShortcutTests(WebDriverPlusTests):
         node = self.driver.find('.selected')
         self.assertEquals(node.inner_html, '3')
 
+    def test_has_class(self):
+        node = self.driver.find(css='ul li.selected')
+        self.assertTrue(node.has_class('selected'))
+
+    def test_set_has_class(self):
+        nodes = self.driver.find(css='ul li')
+        self.assertTrue(nodes.has_class('selected'))
+
+    def test_attr(self):
+        node = self.driver.find(css='ul li.selected')
+        self.assertEquals(node.attr('class'), 'selected')
+
 
 class InspectionTests(WebDriverPlusTests):
     def setUp(self):
@@ -361,20 +373,31 @@ class InspectionTests(WebDriverPlusTests):
     def test_get_style_inline(self):
         elem = self.driver.find('ul')
         self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
 
     def test_get_style_css(self):
         elem = self.driver.find('.selected')
         self.assertTrue(elem.style.color, ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
+        self.assertTrue(elem.css('color'), ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
 
     def test_set_style(self):
         elem = self.driver.find('.selected')
         elem.style.color = 'green'
         self.assertTrue(elem.style.color in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
+        self.assertTrue(elem.css('color') in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
+
+    def test_set_style(self):
+        elem = self.driver.find('.selected')
+        elem.css('color', 'blue')
+        self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
 
     def test_size(self):
         elem = self.driver.find('img')
         self.assertEquals(elem.size.width, 100)
+        self.assertEquals(elem.css('width'), '100px')
         self.assertEquals(elem.size.height, 50)
+        self.assertEquals(elem.css('height'), '50px')
 
     def test_size_unpacked(self):
         (width, height) = self.driver.find('img').size

@@ -89,6 +89,9 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def get_attribute(self, name):
         return self._first.get_attribute(name)
 
+    def attr(self, name):
+        return self._first.attr(name)
+
     @property
     def is_selected(self):
         return self._first.is_selected
@@ -151,6 +154,15 @@ class WebElementSet(SelectorMixin, OrderedSet):
     @property
     def attributes(self):
         return Attributes(self._first)
+
+    def has_class(self, cls):
+        for elem in self:
+            if elem.has_class(cls):
+                return True
+        return False
+
+    def css(self, name, value=None):
+      return self._first.css(name, value)
 
     def javascript(self, script):
         return [elem.javascript(script) for elem in self]

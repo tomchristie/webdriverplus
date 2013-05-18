@@ -207,6 +207,18 @@ class WebElement(SelectorMixin, _WebElement):
     def attributes(self):
         return Attributes(self)
 
+    def attr(self, attribute):
+      return self.get_attribute(attribute)
+
+    def has_class(self, cls):
+      return cls in self.attr('class').split(' ')
+
+    def css(self, name, value=None):
+      if value == None:
+        return getattr(self.style, name)
+      setattr(self.style, name, value)
+      return self
+
     def javascript(self, script):
         script = "return arguments[0].%s;" % script
         return  self._parent.execute_script(script, self)
