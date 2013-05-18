@@ -132,5 +132,10 @@ class WebDriverMixin(SelectorMixin):
             return None
         return alert
 
+    def switch_to_frame(self, frame):
+        if isinstance(frame, WebElementSet):
+            return super(WebDriverMixin, self).switch_to_frame(frame._first)
+        return super(WebDriverMixin, self).switch_to_frame(frame)
+
     def __repr__(self):
         return '<WebDriver Instance, %s>' % (self.name)

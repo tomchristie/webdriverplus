@@ -74,6 +74,11 @@ class DriverTests(WebDriverPlusTests):
         self.driver.open('<h1>123</h1><h2>456</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, '456')
 
+    def test_iframe(self):
+        self.driver.open('<p>Test iframe</p><iframe></iframe>')
+        self.assertEquals(self.driver.find('p').text, 'Test iframe')
+        self.driver.switch_to_frame(self.driver.find('iframe'))
+        self.assertFalse(self.driver.find('p'))
 
 class SelectorTests(WebDriverPlusTests):
     def setUp(self):
