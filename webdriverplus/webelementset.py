@@ -1,7 +1,7 @@
 from webdriverplus.orderedset import OrderedSet
 from webdriverplus.selectors import SelectorMixin
 from webdriverplus.wrappers import Style, Attributes
-
+from webdriverplus.deprecation import deprecated_property
 
 class WebElementSet(SelectorMixin, OrderedSet):
     def __init__(self, webdriver, *args):
@@ -43,6 +43,22 @@ class WebElementSet(SelectorMixin, OrderedSet):
     @property
     def text(self):
         return self._first.text
+
+    @deprecated_property
+    def is_selected(self):
+         return self._first.is_selected()
+
+    @deprecated_property
+    def is_enabled(self):
+         return self._first.is_enabled()
+
+    @deprecated_property
+    def is_displayed(self):
+         return self._first.is_displayed()
+
+    @deprecated_property
+    def is_checked(self):
+         return self._first.is_checked()
 
     # Events...
     def click(self):
@@ -95,18 +111,6 @@ class WebElementSet(SelectorMixin, OrderedSet):
 
     def attr(self, name):
         return self._first.attr(name)
-
-    def is_selected(self):
-        return self._first.is_selected()
-
-    def is_enabled(self):
-        return self._first.is_enabled()
-
-    def is_displayed(self):
-        return self._first.is_displayed()
-
-    def is_checked(self):
-        return self._first.is_checked()
 
     def send_keys(self, *value):
         [elem.send_keys(*value) for elem in self]
