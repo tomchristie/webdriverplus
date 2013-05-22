@@ -87,6 +87,11 @@ highlight
 
 By default WebDriverPlus highlights elements it found. Setting highlight to falsy will disable this
 
+Switching to an iframe
+--------------------------
+
+To switch to a specific iframe, call ``switch_to_frame()``
+
 Quitting browser instances
 --------------------------
 
