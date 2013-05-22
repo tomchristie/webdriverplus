@@ -1,6 +1,6 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-
+from selenium.webdriver.support.expected_conditions import visibility_of_element_located, presence_of_element_located
 
 def xpath_literal(s):
     """
@@ -70,7 +70,8 @@ class SelectorMixin(object):
             yield func(self, value)  # (selector, value) tuple
 
     def find(self, *args, **kwargs):
-        wait = getattr(self, 'wait', 0)
+        # Allow local override
+        wait = kwargs.pop('wait', 0) or getattr(self, 'wait', 0)
         if wait:
             return WebDriverWait(self, wait).until(
                 lambda selector: selector._find_nowait(*args, **kwargs)
@@ -91,6 +92,20 @@ class SelectorMixin(object):
             else:
                 elems = self.find_elements(by=selector, value=value)
         return elems
+
+    def wait_for(self, css=None, **kwargs):
+        displayed = kwargs.pop('displayed', True)
+        wait = kwargs.pop('wait', 0) or getattr(self, 'wait', 0)
+        assert css, 'no selector argument supplied'
+        if css:
+            kwargs['css'] = css
+        assert kwargs, 'no selector argument supplied.'
+
+        for locator in self._get_selector(**kwargs):
+            if displayed:
+                WebDriverWait(self, wait).until(visibility_of_element_located(locator))
+            WebDriverWait(self, wait).until(presence_of_element_located(locator))
+
 
     #def find_all(self, css=None, **kwargs):
     #    (selector, value) = self._get_selector(css, **kwargs)

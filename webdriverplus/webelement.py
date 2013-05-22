@@ -1,6 +1,6 @@
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.remote.webelement import WebElement as _WebElement
-#from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.common.action_chains import ActionChains
 
 from webdriverplus.selectors import SelectorMixin
 from webdriverplus.utils import get_terminal_size
@@ -230,24 +230,37 @@ class WebElement(SelectorMixin, _WebElement):
     # Actions...
     # Native events not supported on mac.
     def double_click(self):
-        self._parent.execute_script(simulate_event('dblclick'), self)
-        #ActionChains(self._parent).double_click(self).perform()
+        # self._parent.execute_script(simulate_event('dblclick'), self)
+        ActionChains(self._parent).double_click(super(WebElement, self)).perform()
+        return self
 
     def context_click(self):
-        self._parent.execute_script(simulate_event('click', button=2), self)
-        #ActionChains(self._parent).double_click(self).perform()
+        # self._parent.execute_script(simulate_event('click', button=2), self)
+        ActionChains(self._parent).double_click(super(WebElement, self)).perform()
+        return self
 
     def click_and_hold(self):
-        self._parent.execute_script(simulate_event('mousedown'), self)
-        #ActionChains(self._parent).click_and_hold(self).perform()
+        # self._parent.execute_script(simulate_event('mousedown'), self)
+        ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
+        return self
 
     def release(self):
-        self._parent.execute_script(simulate_event('mouseup'), self)
-        #ActionChains(self._parent).click_and_hold(self).perform()
+        # self._parent.execute_script(simulate_event('mouseup'), self)
+        ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
+        return self
 
-    def move_to(self):
-        self._parent.execute_script(simulate_event('mouseover'), self)
-        #ActionChains(self._parent).move_to_element(self).perform()
+    def move_to(self, x=0, y=0):
+        # self._parent.execute_script(simulate_event('mouseover'), self)
+        if x and y:
+          ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).perform()
+        else:
+          ActionChains(self._parent).move_to_element(super(WebElement, self)).perform()
+        return self
+
+    def move_to_and_click(self, x=0, y=0):
+        # self._parent.execute_script(simulate_event('mouseover'), self)
+        ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).click().perform()
+        return self
 
     def check(self):
         if not self.is_checked:
