@@ -97,3 +97,13 @@ Sends keys to an element.
 Bug in chrome driver that prevents send_keys to certain elements so click 1st, clear, then send_keys.
 
 https://code.google.com/p/chromedriver/issues/detail?id=290
+
+.select_option(value, text, index)
+------------------
+
+Trigger option select based on ``value``, ``text``, or ``index`` if the element is a ``select`` element
+
+.deselect_option(value, text, index)
+------------------
+
+Trigger option deselect based on ``value``, ``text``, or ``index`` if the element is a ``select`` element

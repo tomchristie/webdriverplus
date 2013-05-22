@@ -236,6 +236,12 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def type_keys(self, *args):
         return self._first.type_keys(*args)
 
+    def select_option(self, value=None, text=None, index=None):
+        return self._first.select_option(value=value, text=text, index=index)
+
+    def deselect_option(self, value=None, text=None, index=None):
+        return self._first.deselect_option(value=value, text=text, index=index)
+
     def __getitem__(self, key):
         if isinstance(key, slice):
             elems = list(self)[key]

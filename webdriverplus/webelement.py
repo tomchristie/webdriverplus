@@ -1,6 +1,7 @@
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.remote.webelement import WebElement as _WebElement
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.select import Select
 
 from webdriverplus.selectors import SelectorMixin
 from webdriverplus.utils import get_terminal_size
@@ -8,7 +9,7 @@ from webdriverplus.wrappers import Style, Attributes, Size, Location
 
 import os
 import sys
-import time
+
 
 
 # http://stackoverflow.com/questions/6157929/how-to-simulate-mouse-click-using-javascript/6158050#6158050
@@ -265,6 +266,30 @@ class WebElement(SelectorMixin, _WebElement):
         self.click()
         self.clear()
         self.send_keys(*args)
+
+    def select_option(self, value=None, text=None, index=None):
+        if len(filter(lambda x: x is not None, (value, text, index))) != 1:
+            raise ValueError("You must supply exactly one of (value, text, index) kwargs")
+
+        select = Select(self)
+        if value is not None:
+            select.select_by_value(value)
+        elif text is not None:
+            select.select_by_visible_text(text)
+        else:
+            select.select_by_index(index)
+
+    def deselect_option(self, value=None, text=None, index=None):
+        if len(filter(lambda x: x is not None, (value, text, index))) != 1:
+            raise ValueError("You must supply exactly one of (value, text, index) kwargs")
+
+        select = Select(self)
+        if value is not None:
+            select.deselect_by_value(value)
+        elif text is not None:
+            select.deselect_by_visible_text(text)
+        else:
+            select.deselect_by_index(index)
 
     def __repr__(self):
         try:

@@ -92,6 +92,17 @@ Switching to an iframe
 
 To switch to a specific iframe, call ``switch_to_frame()``
 
+Waiting for a specific condition
+--------------------------
+
+Right now ``webdriverplus`` supports expected condition style waiting with ``wait_for(selector, displayed=True``.
+By default it will wait until the element with ``selector`` to be present AND visible. If ``displayed`` is set to
+False, it will only wait until element is present.
+
+.. code-block:: python
+
+    browser.wait_for('div')
+
 Quitting browser instances
 --------------------------
 

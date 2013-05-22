@@ -469,7 +469,7 @@ class FormInspectionTests(WebDriverPlusTests):
         super(FormInspectionTests, self).setUp()
         snippet = """<html>
                          <form>
-                             <select>
+                             <select multiple>
                                  <option selected>Walk</option>
                                  <option>Cycle</option>
                                  <option>Drive</option>
@@ -488,14 +488,25 @@ class FormInspectionTests(WebDriverPlusTests):
 
     def test_is_selected(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(text='Walk').is_selected(), True)
-        self.assertEquals(elem.find(text='Cycle').is_selected(), False)
-        self.assertEquals(elem.find(text='Drive').is_selected(), False)
+        self.assertTrue(elem.find(text='Walk').is_selected())
+        self.assertFalse(elem.find(text='Cycle').is_selected())
+        self.assertFalse(elem.find(text='Drive').is_selected())
 
     def test_is_checked(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(value='peanuts').is_checked(), False)
-        self.assertEquals(elem.find(value='jam').is_checked(), True)
+        self.assertFalse(elem.find(value='peanuts').is_checked())
+        self.assertTrue(elem.find(value='jam').is_checked())
+
+    def test_deselect_option(self):
+        elem = self.driver.find('form select')
+        elem.deselect_option(text='Walk')
+        self.assertFalse(elem.attr('value'))
+        self.assertFalse(elem.find(text='Walk').is_selected())
+
+    def test_select_option(self):
+        elem = self.driver.find('form select')
+        elem.select_option(text='Cycle')
+        self.assertTrue(elem.find(text='Cycle').is_selected())
 
 
 class ValueTests(WebDriverPlusTests):
