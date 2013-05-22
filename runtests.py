@@ -525,6 +525,10 @@ class InputTests(WebDriverPlusTests):
         elem = self.driver.find('input')
         elem.send_keys("hello")
 
+    def test_type_keys(self):
+        elem = self.driver.find('input')
+        elem.type_keys("hello")
+
 
 class SetTests(WebDriverPlusTests):
     def setUp(self):

@@ -233,6 +233,9 @@ class WebElementSet(SelectorMixin, OrderedSet):
             ret |= elem.siblings()
         return ret.filter(*args, **kwargs)
 
+    def type_keys(self, *args):
+        return self._first.type_keys(*args)
+
     def __getitem__(self, key):
         if isinstance(key, slice):
             elems = list(self)[key]

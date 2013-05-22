@@ -8,6 +8,7 @@ from webdriverplus.wrappers import Style, Attributes, Size, Location
 
 import os
 import sys
+import time
 
 
 # http://stackoverflow.com/questions/6157929/how-to-simulate-mouse-click-using-javascript/6158050#6158050
@@ -256,6 +257,14 @@ class WebElement(SelectorMixin, _WebElement):
     def uncheck(self):
         if self.is_checked():
             self.click()
+
+    # Bug in chrome driver that prevents send_keys to certain elements
+    # so click 1st, clear, then send_keys
+    # https://code.google.com/p/chromedriver/issues/detail?id=290
+    def type_keys(self, *args):
+        self.click()
+        self.clear()
+        self.send_keys(*args)
 
     def __repr__(self):
         try:

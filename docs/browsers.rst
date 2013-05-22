@@ -82,6 +82,11 @@ we consider a low-level detail that the framework should deal with.
 
 .. _WebDriverWait: http://seleniumhq.org/docs/04_webdriver_advanced.html
 
+highlight
+~~~~
+
+By default WebDriverPlus highlights elements it found. Setting highlight to falsy will disable this
+
 Quitting browser instances
 --------------------------
 
