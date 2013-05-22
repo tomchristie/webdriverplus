@@ -155,21 +155,8 @@ class WebElement(SelectorMixin, _WebElement):
     def value(self):
         return self.get_attribute('value')
 
-    @property
     def is_checked(self):
         return self.get_attribute('checked') is not None
-
-    @property
-    def is_selected(self):
-        return super(WebElement, self).is_selected()
-
-    @property
-    def is_displayed(self):
-        return super(WebElement, self).is_displayed()
-
-    @property
-    def is_enabled(self):
-        return super(WebElement, self).is_enabled()
 
     @property
     def inner_html(self):
@@ -236,7 +223,7 @@ class WebElement(SelectorMixin, _WebElement):
 
     def context_click(self):
         # self._parent.execute_script(simulate_event('click', button=2), self)
-        ActionChains(self._parent).double_click(super(WebElement, self)).perform()
+        ActionChains(self._parent).context_click(super(WebElement, self)).perform()
         return self
 
     def click_and_hold(self):
@@ -245,8 +232,8 @@ class WebElement(SelectorMixin, _WebElement):
         return self
 
     def release(self):
-        # self._parent.execute_script(simulate_event('mouseup'), self)
-        ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
+        self._parent.execute_script(simulate_event('mouseup'), self)
+        # ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
         return self
 
     def move_to(self, x=0, y=0):
@@ -263,11 +250,11 @@ class WebElement(SelectorMixin, _WebElement):
         return self
 
     def check(self):
-        if not self.is_checked:
+        if not self.is_checked():
             self.click()
 
     def uncheck(self):
-        if self.is_checked:
+        if self.is_checked():
             self.click()
 
     def __repr__(self):

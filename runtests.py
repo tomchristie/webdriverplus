@@ -5,6 +5,7 @@ import sys
 import unittest
 
 import webdriverplus
+from selenium.webdriver.common.keys import Keys
 
 # WebElements as set
 
@@ -70,6 +71,28 @@ class DriverTests(WebDriverPlusTests):
         self.driver.open(u'<h1>123</h1><h2>☃</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, u'☃')
 
+    def test_find_wait(self):
+        self.driver.open('<h1 id="t">123</h1>')
+        js = """
+        setTimeout(
+          function () {
+            // create a new div element
+            // and give it some content
+            var newDiv = document.createElement("div");
+            var newContent = document.createTextNode("Hello");
+
+            newDiv.appendChild(newContent); //add the text node to the newly created div.
+
+            // add the newly created element and it's content into the DOM
+            h1 = document.getElementById("t");
+            document.body.insertBefore(newDiv, h1);
+          },
+          1000
+          )
+        """
+        self.driver.execute_script(js)
+        self.assertEquals(self.driver.find('div', wait=2).text, 'Hello')
+
     def test_unicode(self):
         self.driver.open('<h1>123</h1><h2>456</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, '456')
@@ -79,6 +102,13 @@ class DriverTests(WebDriverPlusTests):
         self.assertEquals(self.driver.find('p').text, 'Test iframe')
         self.driver.switch_to_frame(self.driver.find('iframe'))
         self.assertFalse(self.driver.find('p'))
+
+    def test_wait_for(self):
+        self.driver.open('<h1 id="t" style="display:none">123</h1>')
+        self.assertFalse(self.driver.find('#t').is_displayed())
+        self.driver.execute_script('setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
+        self.driver.wait_for('#t', wait=2)
+        self.assertTrue(self.driver.find('#t').is_displayed())
 
 class SelectorTests(WebDriverPlusTests):
     def setUp(self):
@@ -458,14 +488,14 @@ class FormInspectionTests(WebDriverPlusTests):
 
     def test_is_selected(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(text='Walk').is_selected, True)
-        self.assertEquals(elem.find(text='Cycle').is_selected, False)
-        self.assertEquals(elem.find(text='Drive').is_selected, False)
+        self.assertEquals(elem.find(text='Walk').is_selected(), True)
+        self.assertEquals(elem.find(text='Cycle').is_selected(), False)
+        self.assertEquals(elem.find(text='Drive').is_selected(), False)
 
     def test_is_checked(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(value='peanuts').is_checked, False)
-        self.assertEquals(elem.find(value='jam').is_checked, True)
+        self.assertEquals(elem.find(value='peanuts').is_checked(), False)
+        self.assertEquals(elem.find(value='jam').is_checked(), True)
 
 
 class ValueTests(WebDriverPlusTests):
@@ -534,10 +564,13 @@ class ActionTests(WebDriverPlusTests):
         self.assertEquals(self.driver.find(id='msg').text, 'double click')
 
     def test_context_click(self):
-        js = "document.getElementById('msg').innerHTML = event.button"
-        snippet = "<div id='msg'></div><a onclick=\"%s\">here</a>" % js
+        js = "document.getElementById('msg').innerHTML = event.button;"
+        snippet = "<div id='msg'></div><a oncontextmenu=\"%s\">here</a>" % js
         self.driver.open(snippet).find('a').context_click()
         self.assertEquals(self.driver.find(id='msg').text, '2')
+
+        # context menu stays open, so close it
+        self.driver.find('body').send_keys(Keys.ESCAPE)
 
     def test_click_and_hold(self):
         js = "document.getElementById('msg').innerHTML = 'mouse down'"
@@ -559,6 +592,12 @@ class ActionTests(WebDriverPlusTests):
         snippet = "<div id='msg'></div><a onMouseOver=\"%s\">here</a>" % js
         self.driver.open(snippet).find('a').move_to()
         self.assertEquals(self.driver.find(id='msg').text, 'mouse over')
+
+    def test_move_to_and_click(self):
+        js = "document.getElementById('msg').innerHTML = 'click'"
+        snippet = "<div id='msg'></div><a onClick=\"%s\">here</a>" % js
+        self.driver.open(snippet).find('a').move_to_and_click()
+        self.assertEquals(self.driver.find(id='msg').text, 'click')
 
     def test_check_unchecked(self):
         snippet = "<form><input type='checkbox' id='cbx'> Checkbox</form>"

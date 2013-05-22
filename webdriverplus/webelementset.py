@@ -96,21 +96,17 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def attr(self, name):
         return self._first.attr(name)
 
-    @property
     def is_selected(self):
-        return self._first.is_selected
+        return self._first.is_selected()
 
-    @property
     def is_enabled(self):
-        return self._first.is_enabled
+        return self._first.is_enabled()
 
-    @property
     def is_displayed(self):
-        return self._first.is_displayed
+        return self._first.is_displayed()
 
-    @property
     def is_checked(self):
-        return self._first.is_checked
+        return self._first.is_checked()
 
     def send_keys(self, *value):
         [elem.send_keys(*value) for elem in self]
