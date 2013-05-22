@@ -81,8 +81,8 @@ class WebElementSet(SelectorMixin, OrderedSet):
         self._first.release()
         return self
 
-    def move_to(self):
-        self._first.move_to()
+    def move_to(self, x=0, y=0):
+        self._first.move_to(x, y)
         return self
 
     def move_to_and_click(self, *args, **kwargs):
