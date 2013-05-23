@@ -1,6 +1,8 @@
 from webdriverplus.webelement import WebElement
 from webdriverplus.webelementset import WebElementSet
 from webdriverplus.selectors import SelectorMixin
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
 
 import re
 import tempfile
@@ -13,6 +15,7 @@ class WebDriverMixin(SelectorMixin):
         self.reuse_browser = kwargs.pop('reuse_browser', False)
         self.quit_on_exit = kwargs.pop('quit_on_exit', False)
         self.wait = kwargs.pop('wait', 0)
+        self.highlight = kwargs.pop('highlight', True)
         self._highlighted = None
         self._has_quit = False
         super(WebDriverMixin, self).__init__(*args, **kwargs)
@@ -29,6 +32,8 @@ class WebDriverMixin(SelectorMixin):
         self._has_quit = True
 
     def _highlight(self, elems):
+        if not self.highlight:
+            return
         if self._highlighted:
             script = """for (var i = 0, j = arguments.length; i < j; i++) {
                             var elem = arguments[i];
@@ -131,6 +136,11 @@ class WebDriverMixin(SelectorMixin):
         except:
             return None
         return alert
+
+    def switch_to_frame(self, frame):
+        if isinstance(frame, WebElementSet):
+            return super(WebDriverMixin, self).switch_to_frame(frame._first)
+        return super(WebDriverMixin, self).switch_to_frame(frame)
 
     def __repr__(self):
         return '<WebDriver Instance, %s>' % (self.name)

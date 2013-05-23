@@ -3,8 +3,10 @@
 
 import sys
 import unittest
+import warnings
 
 import webdriverplus
+from selenium.webdriver.common.keys import Keys
 
 # WebElements as set
 
@@ -64,15 +66,55 @@ class DriverTests(WebDriverPlusTests):
     def test_open(self):
         page_text = 'abc'
         self.driver.open(page_text)
-        self.assertEquals(self.driver.page_text,  page_text)
+        self.assertEquals(self.driver.page_text, page_text)
 
     def test_find(self):
         self.driver.open(u'<h1>123</h1><h2>☃</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, u'☃')
 
+    def test_find_wait(self):
+        self.driver.open('<h1 id="t">123</h1>')
+        js = """
+        setTimeout(
+          function () {
+            // create a new div element
+            // and give it some content
+            var newDiv = document.createElement("div");
+            var newContent = document.createTextNode("Hello");
+
+            newDiv.appendChild(newContent); //add the text node to the newly created div.
+
+            // add the newly created element and it's content into the DOM
+            h1 = document.getElementById("t");
+            document.body.insertBefore(newDiv, h1);
+          },
+          1000
+          )
+        """
+        self.driver.execute_script(js)
+        self.assertEquals(self.driver.find('div', wait=2).text, 'Hello')
+
     def test_unicode(self):
         self.driver.open('<h1>123</h1><h2>456</h2><h3>789</h3>')
         self.assertEquals(self.driver.find('h2').text, '456')
+
+    def test_iframe(self):
+        self.driver.open('<p>Test iframe</p><iframe></iframe>')
+        self.assertEquals(self.driver.find('p').text, 'Test iframe')
+        self.driver.switch_to_frame(self.driver.find('iframe'))
+        self.assertFalse(self.driver.find('p'))
+
+    def test_wait_for(self):
+        self.driver.open('<h1 id="t" style="display:none">123</h1>')
+        self.assertFalse(self.driver.find('#t').is_displayed())
+        # For backwards compatibility purpose
+        self.assertFalse(self.driver.find('#t').is_displayed)
+        self.driver.execute_script(
+            'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
+        self.driver.wait_for('#t', wait=2)
+        self.assertTrue(self.driver.find('#t').is_displayed())
+        # For backwards compatibility purpose
+        self.assertTrue(self.driver.find('#t').is_displayed)
 
 
 class SelectorTests(WebDriverPlusTests):
@@ -210,7 +252,7 @@ class SelectorTests(WebDriverPlusTests):
         self.assertEquals(len(elem.find(checked=True)), 1)
         self.assertEquals(len(elem.find(checked=False)), 2)
 
-    # TODO: checked=True, checked=False, selected=True, selected=False
+        # TODO: checked=True, checked=False, selected=True, selected=False
 
 
 class TraversalTests(WebDriverPlusTests):
@@ -334,6 +376,18 @@ class ShortcutTests(WebDriverPlusTests):
         node = self.driver.find('.selected')
         self.assertEquals(node.inner_html, '3')
 
+    def test_has_class(self):
+        node = self.driver.find(css='ul li.selected')
+        self.assertTrue(node.has_class('selected'))
+
+    def test_set_has_class(self):
+        nodes = self.driver.find(css='ul li')
+        self.assertTrue(nodes.has_class('selected'))
+
+    def test_attr(self):
+        node = self.driver.find(css='ul li.selected')
+        self.assertEquals(node.attr('class'), 'selected')
+
 
 class InspectionTests(WebDriverPlusTests):
     def setUp(self):
@@ -361,20 +415,31 @@ class InspectionTests(WebDriverPlusTests):
     def test_get_style_inline(self):
         elem = self.driver.find('ul')
         self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
 
     def test_get_style_css(self):
         elem = self.driver.find('.selected')
         self.assertTrue(elem.style.color, ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
+        self.assertTrue(elem.css('color'), ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
 
     def test_set_style(self):
         elem = self.driver.find('.selected')
         elem.style.color = 'green'
         self.assertTrue(elem.style.color in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
+        self.assertTrue(elem.css('color') in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
+
+    def test_set_style(self):
+        elem = self.driver.find('.selected')
+        elem.css('color', 'blue')
+        self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
 
     def test_size(self):
         elem = self.driver.find('img')
         self.assertEquals(elem.size.width, 100)
+        self.assertEquals(elem.css('width'), '100px')
         self.assertEquals(elem.size.height, 50)
+        self.assertEquals(elem.css('height'), '50px')
 
     def test_size_unpacked(self):
         (width, height) = self.driver.find('img').size
@@ -411,7 +476,7 @@ class FormInspectionTests(WebDriverPlusTests):
         super(FormInspectionTests, self).setUp()
         snippet = """<html>
                          <form>
-                             <select>
+                             <select multiple>
                                  <option selected>Walk</option>
                                  <option>Cycle</option>
                                  <option>Drive</option>
@@ -430,14 +495,40 @@ class FormInspectionTests(WebDriverPlusTests):
 
     def test_is_selected(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(text='Walk').is_selected, True)
-        self.assertEquals(elem.find(text='Cycle').is_selected, False)
-        self.assertEquals(elem.find(text='Drive').is_selected, False)
+        self.assertTrue(elem.find(text='Walk').is_selected())
+        self.assertFalse(elem.find(text='Cycle').is_selected())
+        self.assertFalse(elem.find(text='Drive').is_selected())
+
+        # Backwards compat test
+        self.assertTrue(elem.find(text='Walk').is_selected)
+        self.assertFalse(elem.find(text='Cycle').is_selected)
+        self.assertFalse(elem.find(text='Drive').is_selected)
 
     def test_is_checked(self):
         elem = self.driver.find('form')
-        self.assertEquals(elem.find(value='peanuts').is_checked, False)
-        self.assertEquals(elem.find(value='jam').is_checked, True)
+        self.assertFalse(elem.find(value='peanuts').is_checked())
+        self.assertTrue(elem.find(value='jam').is_checked())
+
+        # Backwards compat test
+        self.assertFalse(elem.find(value='peanuts').is_checked)
+        self.assertTrue(elem.find(value='jam').is_checked)
+
+    def test_deselect_option(self):
+        elem = self.driver.find('form select')
+        elem.deselect_option(text='Walk')
+        self.assertFalse(elem.attr('value'))
+        self.assertFalse(elem.find(text='Walk').is_selected())
+
+        # Backwards compat test
+        self.assertFalse(elem.find(text='Walk').is_selected)
+
+    def test_select_option(self):
+        elem = self.driver.find('form select')
+        elem.select_option(text='Cycle')
+        self.assertTrue(elem.find(text='Cycle').is_selected())
+
+        # Backwards compat test
+        self.assertTrue(elem.find(text='Cycle').is_selected)
 
 
 class ValueTests(WebDriverPlusTests):
@@ -466,6 +557,10 @@ class InputTests(WebDriverPlusTests):
     def test_send_keys(self):
         elem = self.driver.find('input')
         elem.send_keys("hello")
+
+    def test_type_keys(self):
+        elem = self.driver.find('input')
+        elem.type_keys("hello")
 
 
 class SetTests(WebDriverPlusTests):
@@ -506,10 +601,13 @@ class ActionTests(WebDriverPlusTests):
         self.assertEquals(self.driver.find(id='msg').text, 'double click')
 
     def test_context_click(self):
-        js = "document.getElementById('msg').innerHTML = event.button"
-        snippet = "<div id='msg'></div><a onclick=\"%s\">here</a>" % js
+        js = "document.getElementById('msg').innerHTML = event.button;"
+        snippet = "<div id='msg'></div><a oncontextmenu=\"%s\">here</a>" % js
         self.driver.open(snippet).find('a').context_click()
         self.assertEquals(self.driver.find(id='msg').text, '2')
+
+        # context menu stays open, so close it
+        self.driver.find('body').send_keys(Keys.ESCAPE)
 
     def test_click_and_hold(self):
         js = "document.getElementById('msg').innerHTML = 'mouse down'"
@@ -531,6 +629,12 @@ class ActionTests(WebDriverPlusTests):
         snippet = "<div id='msg'></div><a onMouseOver=\"%s\">here</a>" % js
         self.driver.open(snippet).find('a').move_to()
         self.assertEquals(self.driver.find(id='msg').text, 'mouse over')
+
+    def test_move_to_and_click(self):
+        js = "document.getElementById('msg').innerHTML = 'click'"
+        snippet = "<div id='msg'></div><a onClick=\"%s\">here</a>" % js
+        self.driver.open(snippet).find('a').move_to_and_click()
+        self.assertEquals(self.driver.find(id='msg').text, 'click')
 
     def test_check_unchecked(self):
         snippet = "<form><input type='checkbox' id='cbx'> Checkbox</form>"
@@ -605,6 +709,72 @@ class NoWaitTests(WebDriverPlusTests):
     def test_element_added_after_load_not_found(self):
         nodes = self.driver.find('p', text_contains='Hello World')
         self.assertEquals(len(nodes), 0)
+
+
+class ClassWithDeprecations(object):
+    @webdriverplus.deprecation.deprecated_property
+    def true(self):
+        return True
+
+    @webdriverplus.deprecation.deprecated_property
+    def false(self):
+        return False
+
+
+class DeprecationWarningTests(unittest.TestCase):
+    def setUp(self):
+        webdriverplus.deprecation.WARN_ONLY = True
+
+    def test_calling(self):
+        instance = ClassWithDeprecations()
+        with warnings.catch_warnings(record=True) as caught:
+            self.assertTrue(instance.true())
+            self.assertEquals(instance.true(), True)
+            self.assertFalse(instance.false())
+            self.assertEquals(instance.false(), False)
+        self.assertEqual(len(caught), 0)
+
+    def test_eq_prop(self):
+        instance = ClassWithDeprecations()
+        with warnings.catch_warnings(record=True) as caught:
+            self.assertEquals(instance.false, False)
+        self.assertEqual(len(caught), 1)
+
+    def test_bool_prop(self):
+        instance = ClassWithDeprecations()
+        with warnings.catch_warnings(record=True) as caught:
+            self.assertTrue(instance.true)
+        self.assertEqual(len(caught), 1)
+
+
+class DeprecationErrorTests(unittest.TestCase):
+    def setUp(self):
+        webdriverplus.deprecation.WARN_ONLY = False
+
+    def test_calling(self):
+        instance = ClassWithDeprecations()
+        self.assertTrue(instance.true())
+        self.assertEquals(instance.true(), True)
+        self.assertFalse(instance.false())
+        self.assertEquals(instance.false(), False)
+
+    def test_eq_prop(self):
+        instance = ClassWithDeprecations()
+        self.assertRaises(
+            webdriverplus.deprecation.DeprecatedPropertyError,
+            lambda: not instance.false
+        )
+
+    def test_bool_prop(self):
+        instance = ClassWithDeprecations()
+        self.assertRaises(
+            webdriverplus.deprecation.DeprecatedPropertyError,
+            lambda: instance.true == True
+        )
+        self.assertRaises(
+            webdriverplus.deprecation.DeprecatedPropertyError,
+            lambda: instance.true != False
+        )
 
 
 if __name__ == '__main__':

@@ -45,10 +45,15 @@ Double-clicks an element.
 
 Performs a context-click (right click) on an element.
 
-.move_to()
+.move_to(x, y)
 ----------
 
-Moves the mouse to center over an element.
+Moves the mouse to an element with offset x and y.
+
+.move_to_and_click(x, y)
+----------
+
+Moves the mouse to an element with offset x and y, then click.
 
 .click_and_hold()
 -----------------
@@ -85,3 +90,20 @@ Clears any user editable text from the element.
 ------------------
 
 Sends keys to an element.
+
+.type_keys(*text*)
+------------------
+
+Bug in chrome driver that prevents send_keys to certain elements so click 1st, clear, then send_keys.
+
+https://code.google.com/p/chromedriver/issues/detail?id=290
+
+.select_option(value, text, index)
+------------------
+
+Trigger option select based on ``value``, ``text``, or ``index`` if the element is a ``select`` element
+
+.deselect_option(value, text, index)
+------------------
+
+Trigger option deselect based on ``value``, ``text``, or ``index`` if the element is a ``select`` element
