@@ -66,7 +66,7 @@ class DriverTests(WebDriverPlusTests):
     def test_open(self):
         page_text = 'abc'
         self.driver.open(page_text)
-        self.assertEquals(self.driver.page_text,  page_text)
+        self.assertEquals(self.driver.page_text, page_text)
 
     def test_find(self):
         self.driver.open(u'<h1>123</h1><h2>☃</h2><h3>789</h3>')
@@ -107,9 +107,15 @@ class DriverTests(WebDriverPlusTests):
     def test_wait_for(self):
         self.driver.open('<h1 id="t" style="display:none">123</h1>')
         self.assertFalse(self.driver.find('#t').is_displayed())
-        self.driver.execute_script('setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
+        # For backwards compatibility purpose
+        self.assertFalse(self.driver.find('#t').is_displayed)
+        self.driver.execute_script(
+            'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
         self.driver.wait_for('#t', wait=2)
         self.assertTrue(self.driver.find('#t').is_displayed())
+        # For backwards compatibility purpose
+        self.assertTrue(self.driver.find('#t').is_displayed)
+
 
 class SelectorTests(WebDriverPlusTests):
     def setUp(self):
@@ -246,7 +252,7 @@ class SelectorTests(WebDriverPlusTests):
         self.assertEquals(len(elem.find(checked=True)), 1)
         self.assertEquals(len(elem.find(checked=False)), 2)
 
-    # TODO: checked=True, checked=False, selected=True, selected=False
+        # TODO: checked=True, checked=False, selected=True, selected=False
 
 
 class TraversalTests(WebDriverPlusTests):
@@ -493,10 +499,19 @@ class FormInspectionTests(WebDriverPlusTests):
         self.assertFalse(elem.find(text='Cycle').is_selected())
         self.assertFalse(elem.find(text='Drive').is_selected())
 
+        # Backwards compat test
+        self.assertTrue(elem.find(text='Walk').is_selected)
+        self.assertFalse(elem.find(text='Cycle').is_selected)
+        self.assertFalse(elem.find(text='Drive').is_selected)
+
     def test_is_checked(self):
         elem = self.driver.find('form')
         self.assertFalse(elem.find(value='peanuts').is_checked())
         self.assertTrue(elem.find(value='jam').is_checked())
+
+        # Backwards compat test
+        self.assertFalse(elem.find(value='peanuts').is_checked)
+        self.assertTrue(elem.find(value='jam').is_checked)
 
     def test_deselect_option(self):
         elem = self.driver.find('form select')
@@ -504,10 +519,16 @@ class FormInspectionTests(WebDriverPlusTests):
         self.assertFalse(elem.attr('value'))
         self.assertFalse(elem.find(text='Walk').is_selected())
 
+        # Backwards compat test
+        self.assertFalse(elem.find(text='Walk').is_selected)
+
     def test_select_option(self):
         elem = self.driver.find('form select')
         elem.select_option(text='Cycle')
         self.assertTrue(elem.find(text='Cycle').is_selected())
+
+        # Backwards compat test
+        self.assertTrue(elem.find(text='Cycle').is_selected)
 
 
 class ValueTests(WebDriverPlusTests):
@@ -688,6 +709,7 @@ class NoWaitTests(WebDriverPlusTests):
     def test_element_added_after_load_not_found(self):
         nodes = self.driver.find('p', text_contains='Hello World')
         self.assertEquals(len(nodes), 0)
+
 
 class ClassWithDeprecations(object):
     @webdriverplus.deprecation.deprecated_property
