@@ -3,6 +3,7 @@ from webdriverplus.selectors import SelectorMixin
 from webdriverplus.wrappers import Style, Attributes
 from webdriverplus.deprecation import deprecated_property
 
+
 class WebElementSet(SelectorMixin, OrderedSet):
     def __init__(self, webdriver, *args):
         super(WebElementSet, self).__init__(*args)
@@ -46,19 +47,19 @@ class WebElementSet(SelectorMixin, OrderedSet):
 
     @deprecated_property
     def is_selected(self):
-         return self._first.is_selected()
+        return self._first.is_selected()
 
     @deprecated_property
     def is_enabled(self):
-         return self._first.is_enabled()
+        return self._first.is_enabled()
 
     @deprecated_property
     def is_displayed(self):
-         return self._first.is_displayed()
+        return self._first.is_displayed()
 
     @deprecated_property
     def is_checked(self):
-         return self._first.is_checked()
+        return self._first.is_checked()
 
     # Events...
     def click(self):
@@ -166,7 +167,7 @@ class WebElementSet(SelectorMixin, OrderedSet):
         return False
 
     def css(self, name, value=None):
-      return self._first.css(name, value)
+        return self._first.css(name, value)
 
     def javascript(self, script):
         return [elem.javascript(script) for elem in self]

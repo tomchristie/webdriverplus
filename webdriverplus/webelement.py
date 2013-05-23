@@ -86,6 +86,7 @@ class ParentProxy(object):
         parent does the traversal while allowing _WebElement to use parent
         to access the WebDriver
     """
+
     def __init__(self, _webelement):
         self._webelement = _webelement
 
@@ -211,24 +212,24 @@ class WebElement(SelectorMixin, _WebElement):
         return Attributes(self)
 
     def attr(self, attribute):
-      return self.get_attribute(attribute)
+        return self.get_attribute(attribute)
 
     def has_class(self, cls):
-      return cls in self.attr('class').split(' ')
+        return cls in self.attr('class').split(' ')
 
     def css(self, name, value=None):
-      if value == None:
-        return getattr(self.style, name)
-      setattr(self.style, name, value)
-      return self
+        if value is None:
+            return getattr(self.style, name)
+        setattr(self.style, name, value)
+        return self
 
     def javascript(self, script):
         script = "return arguments[0].%s;" % script
-        return  self._parent.execute_script(script, self)
+        return self._parent.execute_script(script, self)
 
     def jquery(self, script):
         script = "return $(arguments[0]).%s;" % script
-        return  self._parent.execute_script(script, self)
+        return self._parent.execute_script(script, self)
 
     # Actions...
     # Native events not supported on mac.
@@ -255,9 +256,9 @@ class WebElement(SelectorMixin, _WebElement):
     def move_to(self, x=0, y=0):
         # self._parent.execute_script(simulate_event('mouseover'), self)
         if x and y:
-          ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).perform()
+            ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).perform()
         else:
-          ActionChains(self._parent).move_to_element(super(WebElement, self)).perform()
+            ActionChains(self._parent).move_to_element(super(WebElement, self)).perform()
         return self
 
     def move_to_and_click(self, x=0, y=0):
@@ -321,7 +322,7 @@ class WebElement(SelectorMixin, _WebElement):
 
             if len(ret) >= width - 2:
                 ret = ret[:width - 5] + '...'
-            #self.style.backgroundColor = '#f9edbe'
+                #self.style.backgroundColor = '#f9edbe'
             #self.style.borderColor = '#f9edbe'
             #self.style.outline = '1px solid black'
             return ret
