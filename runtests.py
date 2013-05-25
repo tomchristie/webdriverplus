@@ -682,7 +682,7 @@ WAIT_SNIPPET = """<html>
     <head>
         <script type="text/javascript">
 addTextLater = function() {
-    setTimeout(addText, 100);
+    setTimeout(addText, 1000);
 }
 addText = function () {
     var txtNode = document.createTextNode("Hello World!");
