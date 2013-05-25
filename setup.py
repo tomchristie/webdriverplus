@@ -16,9 +16,9 @@ version_str = '%d.%d.%d' % (version[0], version[1], version[2])
 
 if sys.argv[-1] == 'publish':
     os.system("python setup.py sdist upload")
-    print "You probably want to also tag the version now:"
-    print "  git tag -a %s -m 'version %s'" % (version, version)
-    print "  git push --tags"
+    print("You probably want to also tag the version now:")
+    print("  git tag -a %s -m 'version %s'" % (version, version))
+    print("  git push --tags")
     sys.exit()
 
 f = open('requirements.txt', 'r')

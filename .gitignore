@@ -9,3 +9,7 @@ html/
 build/
 dist/
 *.egg-info/
+.DS_store
+
+.idea/
+ve/
