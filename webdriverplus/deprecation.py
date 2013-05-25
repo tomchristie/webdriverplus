@@ -6,7 +6,7 @@ import warnings
 WARN_ONLY = True
 
 message = """This property has been replaced by a method in order to conform
-with the Selenium API. Plese use %s() instead
+with the Selenium API. Please use %s() instead
 """
 
 
@@ -25,7 +25,7 @@ class DeprecatedProperty(object):
 
     def call_and_notify(self):
         method = self.method
-        method_name = method.func_name
+        method_name = method.__name__
         if WARN_ONLY:
             warnings.warn(message % method_name)
             return self.call()
@@ -39,9 +39,13 @@ class DeprecatedProperty(object):
         value = self.call_and_notify()
         return bool(value)
 
+    # Python3 support
+    def __bool__(self):
+        return self.__nonzero__()
+
     def __eq__(self, other):
         value = self.call_and_notify()
-        return (value == other)
+        return value == other
 
     def __ne__(self, other):
         return not (self == other)
