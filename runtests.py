@@ -126,6 +126,35 @@ class DriverTests(WebDriverPlusTests):
         # For backwards compatibility purpose
         self.assertTrue(self.driver.find('#t').is_displayed)
 
+    def test_wait_for2(self):
+        self.driver.open('<h1 id="t" style="display:none">123</h1>')
+        self.assertFalse(self.driver.find('#t').is_displayed())
+        # For backwards compatibility purpose
+        self.assertFalse(self.driver.find('#t').is_displayed)
+        self.driver.execute_script(
+            'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
+        self.driver.wait_for(text='123', wait=2)
+        el = self.driver.find(text='123')
+        self.assertTrue(el.is_displayed())
+        # For backwards compatibility purpose
+        self.assertTrue(el.is_displayed)
+        self.assertEqual(el.text, '123')
+
+    def test_wait_for3(self):
+        self.driver.open('<h1 id="t" style="display:none">123</h1>')
+        self.assertFalse(self.driver.find('#t').is_displayed())
+        # For backwards compatibility purpose
+        self.assertFalse(self.driver.find('#t').is_displayed)
+        self.driver.execute_script(
+            'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
+
+        self.driver.wait_for('h1', text='123', wait=2)
+        el = self.driver.find('h1', text='123', wait=2)
+        self.assertTrue(el.is_displayed())
+        # For backwards compatibility purpose
+        self.assertTrue(el.is_displayed)
+        self.assertEqual(el.text, '123')
+
 
 class SelectorTests(WebDriverPlusTests):
     def setUp(self):

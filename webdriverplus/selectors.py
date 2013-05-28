@@ -96,7 +96,7 @@ class SelectorMixin(object):
     def wait_for(self, css=None, **kwargs):
         displayed = kwargs.pop('displayed', True)
         wait = kwargs.pop('wait', 0) or getattr(self, 'wait', 0)
-        assert css, 'no selector argument supplied'
+
         if css:
             kwargs['css'] = css
         assert kwargs, 'no selector argument supplied.'
