@@ -8,7 +8,11 @@ from webdriverplus.selectors import SelectorMixin
 from webdriverplus.utils import get_terminal_size
 from webdriverplus.wrappers import Style, Attributes, Size, Location
 
-from urllib import quote
+try:
+    from urllib2 import quote
+except ImportError:
+    from urllib.request import quote
+	
 import os
 import sys
 
