@@ -137,6 +137,10 @@ class WebElementSet(SelectorMixin, OrderedSet):
     def value(self):
         return self._first.value
 
+    @value.setter
+    def value(self, value):
+        self._first.value = value
+        
     def value_of_css_property(self, property_name):
         return [elem.value_of_css_property(property_name) for elem in self]
 
