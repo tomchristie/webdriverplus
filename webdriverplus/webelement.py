@@ -152,10 +152,6 @@ class WebElement(SelectorMixin, _WebElement):
 
     # Inspection & Manipulation
     @property
-    def id(self):
-        return self.get_attribute('id')
-
-    @property
     def type(self):
         return self.get_attribute('type')
 
@@ -166,22 +162,6 @@ class WebElement(SelectorMixin, _WebElement):
     @value.setter
     def value(self, value):
         self._parent.execute_script('arguments[0].value=unescape(decodeURI("%s"));' % quote(value), self)
-
-    @deprecated_property
-    def is_checked(self):
-        return self.get_attribute('checked') is not None
-
-    @deprecated_property
-    def is_selected(self):
-        return super(WebElement, self).is_selected()
-
-    @deprecated_property
-    def is_displayed(self):
-        return super(WebElement, self).is_displayed()
-
-    @deprecated_property
-    def is_enabled(self):
-        return super(WebElement, self).is_enabled()
 
     @property
     def inner_html(self):
@@ -202,10 +182,6 @@ class WebElement(SelectorMixin, _WebElement):
         return len(self.prev_all())
 
     @property
-    def style(self):
-        return Style(self)
-
-    @property
     def size(self):
         val = super(WebElement, self).size
         return Size(val['width'], val['height'])
@@ -219,6 +195,18 @@ class WebElement(SelectorMixin, _WebElement):
     def attributes(self):
         return Attributes(self)
 
+    def is_checked(self):
+        return self.get_attribute('checked') is not None
+
+    def is_selected(self):
+        return super(WebElement, self).is_selected()
+
+    def is_displayed(self):
+        return super(WebElement, self).is_displayed()
+
+    def is_enabled(self):
+        return super(WebElement, self).is_enabled()
+
     def attr(self, attribute):
         return self.get_attribute(attribute)
 
@@ -226,9 +214,13 @@ class WebElement(SelectorMixin, _WebElement):
         return cls in self.attr('class').split(' ')
 
     def css(self, name, value=None):
+        style = Style(self)
+        # Quick way to turn dash css style (background-color) into js property (backgroundColor)
+        name = ''.join(x.capitalize() if i != 0 else x for i, x in enumerate(name.split('-')))
         if value is None:
-            return getattr(self.style, name)
-        setattr(self.style, name, value)
+            return getattr(style, name)
+
+        setattr(style, name, value)
         return self
 
     def javascript(self, script):

@@ -61,6 +61,14 @@ selecting the correct elements:
 
 ![image](https://raw.github.com/tomchristie/webdriverplus/master/docs/screenshot.png)
 
+**IMPORTANT**: Breaking changes in 0.2.0
+----------
+Mainly methods that cause conflicts with the native Python WebDriver will be removed. Also methods with duplicate functionalities will be removed also.
+
+- `id` property is no longer supported due to conflict with native Python WebDriver. You can use `attr('id')` instead.
+- `is_checked`, `is_displayed`, `is_enabled` and `is_selected` will be methods instead of properties (so `is_checked()`, `is_displayed()`, `is_enabled()` and `is_selected()`)
+- `style` property will be removed. You can use `css(name, value)` to get/set css properties
+
 Next steps
 ----------
 

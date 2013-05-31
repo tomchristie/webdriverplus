@@ -117,42 +117,30 @@ class DriverTests(WebDriverPlusTests):
     def test_wait_for(self):
         self.driver.open('<h1 id="t" style="display:none">123</h1>')
         self.assertFalse(self.driver.find('#t').is_displayed())
-        # For backwards compatibility purpose
-        self.assertFalse(self.driver.find('#t').is_displayed)
         self.driver.execute_script(
             'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
         self.driver.wait_for('#t', wait=2)
         self.assertTrue(self.driver.find('#t').is_displayed())
-        # For backwards compatibility purpose
-        self.assertTrue(self.driver.find('#t').is_displayed)
 
     def test_wait_for2(self):
         self.driver.open('<h1 id="t" style="display:none">123</h1>')
         self.assertFalse(self.driver.find('#t').is_displayed())
-        # For backwards compatibility purpose
-        self.assertFalse(self.driver.find('#t').is_displayed)
         self.driver.execute_script(
             'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
         self.driver.wait_for(text='123', wait=2)
         el = self.driver.find(text='123')
         self.assertTrue(el.is_displayed())
-        # For backwards compatibility purpose
-        self.assertTrue(el.is_displayed)
         self.assertEqual(el.text, '123')
 
     def test_wait_for3(self):
         self.driver.open('<h1 id="t" style="display:none">123</h1>')
         self.assertFalse(self.driver.find('#t').is_displayed())
-        # For backwards compatibility purpose
-        self.assertFalse(self.driver.find('#t').is_displayed)
         self.driver.execute_script(
             'setTimeout(function () { document.getElementById("t").style.display="block"}, 1000)')
 
         self.driver.wait_for('h1', text='123', wait=2)
         el = self.driver.find('h1', text='123', wait=2)
         self.assertTrue(el.is_displayed())
-        # For backwards compatibility purpose
-        self.assertTrue(el.is_displayed)
         self.assertEqual(el.text, '123')
 
 
@@ -411,7 +399,7 @@ class FilteringTests(WebDriverPlusTests):
 class ShortcutTests(WebDriverPlusTests):
     def setUp(self):
         super(ShortcutTests, self).setUp()
-        snippet = """<ul>
+        snippet = """<ul id='list'>
                          <li>1</li>
                          <li>2</li>
                          <li class="selected">3</li>
@@ -444,6 +432,10 @@ class ShortcutTests(WebDriverPlusTests):
         node = self.driver.find(css='ul li.selected')
         self.assertEqual(node.attr('class'), 'selected')
 
+    def test_attr_id(self):
+        node = self.driver.find('ul')
+        self.assertEqual(node.attr('id'), 'list')
+
 
 class InspectionTests(WebDriverPlusTests):
     def setUp(self):
@@ -470,25 +462,26 @@ class InspectionTests(WebDriverPlusTests):
 
     def test_get_style_inline(self):
         elem = self.driver.find('ul')
-        self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
         self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
 
     def test_get_style_css(self):
         elem = self.driver.find('.selected')
-        self.assertTrue(elem.style.color, ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
         self.assertTrue(elem.css('color'), ('#ff0000', 'red', 'rgb(255, 0, 0)', 'rgba(255 ,0, 0, 1)'))
 
     def test_set_style(self):
         elem = self.driver.find('.selected')
-        elem.style.color = 'green'
-        self.assertTrue(elem.style.color in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
+        elem.css('color', 'green')
         self.assertTrue(elem.css('color') in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
 
-    def test_set_style(self):
+    def test_set_style2(self):
         elem = self.driver.find('.selected')
         elem.css('color', 'blue')
-        self.assertTrue(elem.style.color in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
         self.assertTrue(elem.css('color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        # Test for setting css style with dash
+        elem.css('background-color', 'blue')
+        self.assertTrue(elem.css('background-color') in ('#0000ff', 'blue', 'rgb(0, 0, 255)', 'rgba(0, 0, 255, 1)'))
+        elem.css('backgroundColor', 'green')
+        self.assertTrue(elem.css('backgroundColor') in ('#008000', 'green', 'rgb(0, 128, 0)', 'rgba(0, 128, 0, 1)'))
 
     def test_size(self):
         elem = self.driver.find('img')
@@ -555,19 +548,10 @@ class FormInspectionTests(WebDriverPlusTests):
         self.assertFalse(elem.find(text='Cycle').is_selected())
         self.assertFalse(elem.find(text='Drive').is_selected())
 
-        # Backwards compat test
-        self.assertTrue(elem.find(text='Walk').is_selected)
-        self.assertFalse(elem.find(text='Cycle').is_selected)
-        self.assertFalse(elem.find(text='Drive').is_selected)
-
     def test_is_checked(self):
         elem = self.driver.find('form')
         self.assertFalse(elem.find(value='peanuts').is_checked())
         self.assertTrue(elem.find(value='jam').is_checked())
-
-        # Backwards compat test
-        self.assertFalse(elem.find(value='peanuts').is_checked)
-        self.assertTrue(elem.find(value='jam').is_checked)
 
     def test_deselect_option(self):
         elem = self.driver.find('form select')
@@ -575,16 +559,10 @@ class FormInspectionTests(WebDriverPlusTests):
         self.assertFalse(elem.attr('value'))
         self.assertFalse(elem.find(text='Walk').is_selected())
 
-        # Backwards compat test
-        self.assertFalse(elem.find(text='Walk').is_selected)
-
     def test_select_option(self):
         elem = self.driver.find('form select')
         elem.select_option(text='Cycle')
         self.assertTrue(elem.find(text='Cycle').is_selected())
-
-        # Backwards compat test
-        self.assertTrue(elem.find(text='Cycle').is_selected)
 
 
 class ValueTests(WebDriverPlusTests):
