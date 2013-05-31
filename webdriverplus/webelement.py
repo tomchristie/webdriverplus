@@ -8,6 +8,11 @@ from webdriverplus.selectors import SelectorMixin
 from webdriverplus.utils import get_terminal_size
 from webdriverplus.wrappers import Style, Attributes, Size, Location
 
+try:
+    from urllib2 import quote
+except ImportError:
+    from urllib.request import quote
+	
 import os
 import sys
 
@@ -158,6 +163,10 @@ class WebElement(SelectorMixin, _WebElement):
     @property
     def value(self):
         return self.get_attribute('value')
+    
+    @value.setter
+    def value(self, value):
+        self._parent.execute_script('arguments[0].value=unescape(decodeURI("%s"));' % (quote(value)), self )
 
     @deprecated_property
     def is_checked(self):
