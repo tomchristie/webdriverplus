@@ -176,6 +176,10 @@ class SelectorTests(WebDriverPlusTests):
                              <input type="text" name="username" value="lucy"/>
                              <label for="password">Password:</label>
                              <input type="password" name="password" />
+                             <select>
+                                <option value='1'>1</option>
+                                <option value='2'>2</option>
+                             </select>
                          </form>
                          <form id="checkboxlist">
                              <input type="checkbox" value="red" />
@@ -281,6 +285,19 @@ class SelectorTests(WebDriverPlusTests):
         self.assertEqual(node.tag_name, 'input')
         self.assertEqual(node.type, 'checkbox')
         self.assertEqual(node.value, 'blue')
+
+    def test_value_setter(self):
+        node = self.driver.find('input[type="text"]')
+        self.assertEqual(node.value, 'lucy')
+        node.value = 'lucyyy'
+        node = self.driver.find('input[type="text"]')
+        self.assertEqual(node.value, 'lucyyy')
+
+    def test_value_setter_select(self):
+        node = self.driver.find('select')
+        node.value = '2'
+        node = self.driver.find('select')
+        self.assertEqual(node.value, '2')
 
     def test_type(self):
         node = self.driver.find(type='checkbox')

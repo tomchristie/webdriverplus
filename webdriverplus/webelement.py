@@ -12,10 +12,9 @@ try:
     from urllib2 import quote
 except ImportError:
     from urllib.request import quote
-	
+
 import os
 import sys
-
 
 
 # http://stackoverflow.com/questions/6157929/how-to-simulate-mouse-click-using-javascript/6158050#6158050
@@ -166,7 +165,7 @@ class WebElement(SelectorMixin, _WebElement):
     
     @value.setter
     def value(self, value):
-        self._parent.execute_script('arguments[0].value=unescape(decodeURI("%s"));' % (quote(value)), self )
+        self._parent.execute_script('arguments[0].value=unescape(decodeURI("%s"));' % quote(value), self)
 
     @deprecated_property
     def is_checked(self):
@@ -272,7 +271,11 @@ class WebElement(SelectorMixin, _WebElement):
 
     def move_to_and_click(self, x=0, y=0):
         # self._parent.execute_script(simulate_event('mouseover'), self)
-        ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).click().perform()
+        if x and y:
+            action_chains = ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y)
+        else:
+            action_chains = ActionChains(self._parent).move_to_element(super(WebElement, self))
+        action_chains.click().perform()
         return self
 
     def check(self):
