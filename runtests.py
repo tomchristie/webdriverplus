@@ -37,7 +37,6 @@ class WebDriverPlusTests(unittest.TestCase):
     extra_webdriver_kwargs = {}
 
     def setUp(self):
-        super(WebDriverPlusTests, self).setUp()
         self.driver = webdriverplus.WebDriver(browser, reuse_browser=True,
                                               **self.extra_webdriver_kwargs)
 

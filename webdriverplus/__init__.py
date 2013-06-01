@@ -6,7 +6,7 @@ from selenium.webdriver.remote.webdriver import WebDriver as _Remote
 from selenium.webdriver.phantomjs.webdriver import WebDriver as _PhantomJS
 
 from webdriverplus.utils import _download
-from webdriverplus.webdriver import WebDriverMixin
+from webdriverplus.webdriver import WebDriverDecorator
 from webdriverplus.webelement import WebElement
 
 import atexit
@@ -26,7 +26,7 @@ def get_version():
     return '%d.%d.%d' % (VERSION[0], VERSION[1], VERSION[2])
 
 
-class WebDriver(WebDriverMixin):
+class WebDriver(WebDriverDecorator):
     _pool = {}  # name -> (instance, signature)
     _quit_on_exit = set()  # set of instances
     _selenium_server = None  # Popen object
@@ -95,28 +95,38 @@ class WebDriver(WebDriverMixin):
 atexit.register(WebDriver._at_exit)
 
 
-class Firefox(WebDriverMixin, _Firefox):
-    pass
+class Firefox(WebDriverDecorator):
+    def __init__(self, *args, **kwargs):
+        kwargs['driver'] = _Firefox
+        super(Firefox, self).__init__(*args, **kwargs)
 
 
-class Chrome(WebDriverMixin, _Chrome):
-    pass
+class Chrome(WebDriverDecorator):
+    def __init__(self, *args, **kwargs):
+        kwargs['driver'] = _Chrome
+        super(Firefox, self).__init__(*args, **kwargs)
 
 
-class Ie(WebDriverMixin, _Ie):
-    pass
+class Ie(WebDriverDecorator):
+    def __init__(self, *args, **kwargs):
+        kwargs['driver'] = _Ie
+        super(Firefox, self).__init__(*args, **kwargs)
 
 
-class Remote(WebDriverMixin, _Remote):
-    pass
+class Remote(WebDriverDecorator):
+    def __init__(self, *args, **kwargs):
+        kwargs['driver'] = _Remote
+        super(Firefox, self).__init__(*args, **kwargs)
 
 
-class PhantomJS(WebDriverMixin, _PhantomJS):
-    pass
+class PhantomJS(WebDriverDecorator):
+    def __init__(self, *args, **kwargs):
+        kwargs['driver'] = _PhantomJS
+        super(Firefox, self).__init__(*args, **kwargs)
 
 
-class HtmlUnit(WebDriverMixin, _Remote):
-    _selenium = 'selenium-server-standalone-2.22.0.jar'
+class HtmlUnit(Remote):
+    _selenium = 'selenium-server-standalone-2.33.0.jar'
     _selenium_url = 'http://selenium.googlecode.com/files/' + _selenium
     _auto_install = True
 

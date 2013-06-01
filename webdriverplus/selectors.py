@@ -73,8 +73,8 @@ class SelectorMixin(object):
         # Allow local override
         wait = kwargs.pop('wait', 0) or getattr(self, 'wait', 0)
         if wait:
-            return WebDriverWait(self, wait).until(
-                lambda selector: selector._find_nowait(*args, **kwargs)
+            return WebDriverWait(self._get_driver(), wait).until(
+                lambda _: self._find_nowait(*args, **kwargs)
             )
         else:
             return self._find_nowait(*args, **kwargs)
@@ -103,9 +103,11 @@ class SelectorMixin(object):
 
         for locator in self._get_selector(**kwargs):
             if displayed:
-                WebDriverWait(self, wait).until(visibility_of_element_located(locator))
-            WebDriverWait(self, wait).until(presence_of_element_located(locator))
+                WebDriverWait(self._get_driver(), wait).until(visibility_of_element_located(locator))
+            WebDriverWait(self._get_driver(), wait).until(presence_of_element_located(locator))
 
+    def _get_driver(self):
+        return None
 
     #def find_all(self, css=None, **kwargs):
     #    (selector, value) = self._get_selector(css, **kwargs)

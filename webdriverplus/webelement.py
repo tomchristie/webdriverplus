@@ -198,15 +198,6 @@ class WebElement(SelectorMixin, _WebElement):
     def is_checked(self):
         return self.get_attribute('checked') is not None
 
-    def is_selected(self):
-        return super(WebElement, self).is_selected()
-
-    def is_displayed(self):
-        return super(WebElement, self).is_displayed()
-
-    def is_enabled(self):
-        return super(WebElement, self).is_enabled()
-
     def attr(self, attribute):
         return self.get_attribute(attribute)
 

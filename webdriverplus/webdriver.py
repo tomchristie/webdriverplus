@@ -1,16 +1,16 @@
+from selenium.webdriver.remote.webelement import WebElement as _WebElement
 from webdriverplus.webelement import WebElement
 from webdriverplus.webelementset import WebElementSet
 from webdriverplus.selectors import SelectorMixin
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.support.wait import WebDriverWait
 
 import re
 import tempfile
+import inspect
 
 from selenium.common.exceptions import StaleElementReferenceException
 
 
-class WebDriverMixin(SelectorMixin):
+class WebDriverDecorator(SelectorMixin):
     def __init__(self, *args, **kwargs):
         self.reuse_browser = kwargs.pop('reuse_browser', False)
         self.quit_on_exit = kwargs.pop('quit_on_exit', False)
@@ -18,7 +18,12 @@ class WebDriverMixin(SelectorMixin):
         self.highlight = kwargs.pop('highlight', True)
         self._highlighted = None
         self._has_quit = False
-        super(WebDriverMixin, self).__init__(*args, **kwargs)
+        driver = kwargs.pop('driver', None)
+        # If driver is a class, initialize it
+        if inspect.isclass(driver):
+            self.driver = driver(*args, **kwargs)
+        elif driver is not None:
+            self.driver = driver
 
     def quit(self, force=False):
         if self._has_quit:
@@ -28,8 +33,11 @@ class WebDriverMixin(SelectorMixin):
             # if alert:
             #     alert.dismiss()
             return
-        super(WebDriverMixin, self).quit()
+        self.driver.quit()
         self._has_quit = True
+
+    def _get_driver(self):
+        return self.driver
 
     def _highlight(self, elems):
         if not self.highlight:
@@ -42,7 +50,7 @@ class WebDriverMixin(SelectorMixin):
                             elem.style.outline = elem.getAttribute('savedOutline');
                         }"""
             try:
-                self.execute_script(script, *self._highlighted)
+                self.driver.execute_script(script, *self._highlighted)
             except StaleElementReferenceException:
                 pass
 
@@ -58,7 +66,7 @@ class WebDriverMixin(SelectorMixin):
                 elem.style.outline = '1px solid black';
             }"""
         try:
-            self.execute_script(script, *elems)
+            self.driver.execute_script(script, *elems)
         except StaleElementReferenceException:
             pass
 
@@ -68,11 +76,6 @@ class WebDriverMixin(SelectorMixin):
 
     # Override the default behavior to return our own WebElement and
     # WebElements objects.
-    def _is_web_element(self, value):
-        return isinstance(value, dict) and 'ELEMENT' in value
-
-    def _is_web_element_list(self, lst):
-        return all(isinstance(value, WebElement) for value in lst)
 
     def _create_web_element(self, element_id):
         return WebElement(self, element_id)
@@ -80,33 +83,16 @@ class WebDriverMixin(SelectorMixin):
     def _create_web_elements(self, elements):
         return WebElementSet(self, elements)
 
-    def _unwrap_value(self, value):
-        if self._is_web_element(value):
-            return self._create_web_element(value['ELEMENT'])
+    def _convert_value(self, value):
+        if isinstance(value, _WebElement):
+            return self._create_web_element(value.id)
         elif isinstance(value, list):
-            lst = [self._unwrap_value(item) for item in value]
-            if self._is_web_element_list(lst):
-                return self._create_web_elements(lst)
-            return lst
-        else:
-            return value
-
-    def _wrap_value(self, value):
-        if isinstance(value, dict):
-            converted = {}
-            for key, val in value.items():
-                converted[key] = self._wrap_value(val)
-            return converted
-        elif isinstance(value, WebElement):
-            return {'ELEMENT': value._id}  # Use '._id', not '.id'
-        elif isinstance(value, list):
-            return list(self._wrap_value(item) for item in value)
-        else:
-            return value
+            return self._create_web_elements(self._create_web_element(elem.id) for elem in value)
+        return value
 
     # Override get to return self
     def get(self, url):
-        super(WebDriverMixin, self).get(url)
+        self.driver.get(url)
         return self
 
     # Add some useful shortcuts.
@@ -130,7 +116,7 @@ class WebDriverMixin(SelectorMixin):
 
     @property
     def alert(self):
-        alert = self.switch_to_alert()
+        alert = self.driver.switch_to_alert()
         try:
             alert.text
         except:
@@ -139,8 +125,26 @@ class WebDriverMixin(SelectorMixin):
 
     def switch_to_frame(self, frame):
         if isinstance(frame, WebElementSet):
-            return super(WebDriverMixin, self).switch_to_frame(frame._first)
-        return super(WebDriverMixin, self).switch_to_frame(frame)
+            return self.driver.switch_to_frame(frame._first)
+        return self.driver.switch_to_frame(frame)
+
+    def execute(self, *args, **kwargs):
+        resp = self.driver.execute(*args, **kwargs)
+        resp['value'] = self._convert_value(resp.get('value', None))
+        return resp
+
+    def __getattr__(self, name):
+        attr = getattr(self.driver, name)
+        if name.startswith('find_'):
+            def wrapper(*args, **kwargs):
+                elems = attr(*args, **kwargs)
+                if elems is None:
+                    return elems
+                if isinstance(elems, list):
+                    return self._create_web_elements(self._create_web_element(elem.id) for elem in elems)
+                return self._create_web_elements([self._create_web_element(elems.id)])
+            return wrapper
+        return attr
 
     def __repr__(self):
-        return '<WebDriver Instance, %s>' % (self.name)
+        return '<WebDriver Instance, %s>' % self.driver.name
