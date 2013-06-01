@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.expected_conditions import visibility_of_element_located, presence_of_element_located
@@ -106,8 +107,9 @@ class SelectorMixin(object):
                 WebDriverWait(self._get_driver(), wait).until(visibility_of_element_located(locator))
             WebDriverWait(self._get_driver(), wait).until(presence_of_element_located(locator))
 
+    @abstractmethod
     def _get_driver(self):
-        return None
+        raise NotImplementedError
 
     #def find_all(self, css=None, **kwargs):
     #    (selector, value) = self._get_selector(css, **kwargs)

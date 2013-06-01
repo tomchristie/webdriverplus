@@ -1,7 +1,6 @@
 from webdriverplus.orderedset import OrderedSet
 from webdriverplus.selectors import SelectorMixin
-from webdriverplus.wrappers import Style, Attributes
-from webdriverplus.deprecation import deprecated_property
+from webdriverplus.wrappers import Attributes
 
 
 class WebElementSet(SelectorMixin, OrderedSet):

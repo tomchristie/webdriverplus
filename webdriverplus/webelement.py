@@ -222,42 +222,34 @@ class WebElement(SelectorMixin, _WebElement):
         script = "return $(arguments[0]).%s;" % script
         return self._parent.execute_script(script, self)
 
-    # Actions...
-    # Native events not supported on mac.
     def double_click(self):
-        # self._parent.execute_script(simulate_event('dblclick'), self)
-        ActionChains(self._parent).double_click(super(WebElement, self)).perform()
+        ActionChains(self._parent).double_click(self).perform()
         return self
 
     def context_click(self):
-        # self._parent.execute_script(simulate_event('click', button=2), self)
-        ActionChains(self._parent).context_click(super(WebElement, self)).perform()
+        ActionChains(self._parent).context_click(self).perform()
         return self
 
     def click_and_hold(self):
-        # self._parent.execute_script(simulate_event('mousedown'), self)
-        ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
+        ActionChains(self._parent).click_and_hold(self).perform()
         return self
 
     def release(self):
-        self._parent.execute_script(simulate_event('mouseup'), self)
-        # ActionChains(self._parent).click_and_hold(super(WebElement, self)).perform()
+        ActionChains(self._parent).release(self).perform()
         return self
 
     def move_to(self, x=0, y=0):
-        # self._parent.execute_script(simulate_event('mouseover'), self)
         if x and y:
-            ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y).perform()
+            ActionChains(self._parent).move_to_element_with_offset(self, x, y).perform()
         else:
-            ActionChains(self._parent).move_to_element(super(WebElement, self)).perform()
+            ActionChains(self._parent).move_to_element(self).perform()
         return self
 
     def move_to_and_click(self, x=0, y=0):
-        # self._parent.execute_script(simulate_event('mouseover'), self)
         if x and y:
-            action_chains = ActionChains(self._parent).move_to_element_with_offset(super(WebElement, self), x, y)
+            action_chains = ActionChains(self._parent).move_to_element_with_offset(self, x, y)
         else:
-            action_chains = ActionChains(self._parent).move_to_element(super(WebElement, self))
+            action_chains = ActionChains(self._parent).move_to_element(self)
         action_chains.click().perform()
         return self
 
