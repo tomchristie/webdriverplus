@@ -14,6 +14,7 @@ import os
 import socket
 import subprocess
 import time
+
 try:
     from urllib2 import URLError
 except ImportError:
@@ -30,7 +31,7 @@ class WebDriver(WebDriverDecorator):
     _pool = {}  # name -> (instance, signature)
     _quit_on_exit = set()  # set of instances
     _selenium_server = None  # Popen object
-    _default_browser = 'firefox'
+    _default_browser_name = 'firefox'
 
     @classmethod
     def _at_exit(cls):
@@ -47,36 +48,55 @@ class WebDriver(WebDriverDecorator):
                 pass
 
     @classmethod
+    def _clear(cls):
+        cls._pool.clear()
+
+    @classmethod
     def _get_from_pool(cls, browser):
         """Returns (instance, (args, kwargs))"""
         return cls._pool.get(browser, (None, (None, None)))
 
     def __new__(cls, browser=None, *args, **kwargs):
-        browser = browser or cls._default_browser
         quit_on_exit = kwargs.get('quit_on_exit', True)
         reuse_browser = kwargs.get('reuse_browser')
         signature = (args, kwargs)
-        browser = browser.lower()
 
-        pooled_browser, pooled_signature = WebDriver._get_from_pool(browser)
-
+        browser = browser or cls._default_browser_name
         reused_pooled_browser = False
+        pooled_browser = None
+        
+        try:
+            is_str = isinstance(browser, basestring)
+        except NameError:
+            is_str = isinstance(browser, str)
+        if is_str:
+            browser = browser.lower()
+            pooled_browser, pooled_signature = WebDriver._get_from_pool(browser)
 
-        if pooled_signature == signature:
-            driver = pooled_browser
-            reused_pooled_browser = True
-        elif browser == 'firefox':
-            driver = Firefox(*args, **kwargs)
-        elif browser == 'chrome':
-            driver = Chrome(*args, **kwargs)
-        elif browser == 'ie':
-            driver = Ie(*args, **kwargs)
-        elif browser == 'remote':
-            driver = Remote(*args, **kwargs)
-        elif browser == 'phantomjs':
-            driver = PhantomJS(*args, **kwargs)
-        elif browser == 'htmlunit':
-            driver = HtmlUnit(*args, **kwargs)
+            if pooled_signature == signature:
+                driver = pooled_browser
+                reused_pooled_browser = True
+            elif browser == 'firefox':
+                driver = Firefox(*args, **kwargs)
+            elif browser == 'chrome':
+                driver = Chrome(*args, **kwargs)
+            elif browser == 'ie':
+                driver = Ie(*args, **kwargs)
+            elif browser == 'remote':
+                driver = Remote(*args, **kwargs)
+            elif browser == 'phantomjs':
+                driver = PhantomJS(*args, **kwargs)
+            elif browser == 'htmlunit':
+                driver = HtmlUnit(*args, **kwargs)
+
+        # If a WebDriverDecorator/WebDriver is given, add it to the pool
+        elif isinstance(browser, WebDriverDecorator):
+            driver = browser
+            browser = driver.name
+        else:
+            kwargs['driver'] = browser
+            driver = WebDriverDecorator(*args, **kwargs)
+            browser = driver.name
 
         if reuse_browser and not reused_pooled_browser:
             if pooled_browser:
@@ -104,25 +124,25 @@ class Firefox(WebDriverDecorator):
 class Chrome(WebDriverDecorator):
     def __init__(self, *args, **kwargs):
         kwargs['driver'] = _Chrome
-        super(Firefox, self).__init__(*args, **kwargs)
+        super(Chrome, self).__init__(*args, **kwargs)
 
 
 class Ie(WebDriverDecorator):
     def __init__(self, *args, **kwargs):
         kwargs['driver'] = _Ie
-        super(Firefox, self).__init__(*args, **kwargs)
+        super(Ie, self).__init__(*args, **kwargs)
 
 
 class Remote(WebDriverDecorator):
     def __init__(self, *args, **kwargs):
         kwargs['driver'] = _Remote
-        super(Firefox, self).__init__(*args, **kwargs)
+        super(Remote, self).__init__(*args, **kwargs)
 
 
 class PhantomJS(WebDriverDecorator):
     def __init__(self, *args, **kwargs):
         kwargs['driver'] = _PhantomJS
-        super(Firefox, self).__init__(*args, **kwargs)
+        super(PhantomJS, self).__init__(*args, **kwargs)
 
 
 class HtmlUnit(Remote):

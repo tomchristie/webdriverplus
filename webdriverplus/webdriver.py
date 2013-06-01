@@ -20,9 +20,11 @@ class WebDriverDecorator(SelectorMixin):
         self._has_quit = False
         driver = kwargs.pop('driver', None)
         # If driver is a class, initialize it
+        if driver is None:
+            raise Exception('Need a WebDriver class or instance')
         if inspect.isclass(driver):
             self.driver = driver(*args, **kwargs)
-        elif driver is not None:
+        else:
             self.driver = driver
 
     def quit(self, force=False):
@@ -137,14 +139,9 @@ class WebDriverDecorator(SelectorMixin):
         attr = getattr(self.driver, name)
         if name.startswith('find_'):
             def wrapper(*args, **kwargs):
-                elems = attr(*args, **kwargs)
-                if elems is None:
-                    return elems
-                if isinstance(elems, list):
-                    return self._create_web_elements(self._create_web_element(elem.id) for elem in elems)
-                return self._create_web_elements([self._create_web_element(elems.id)])
+                return self._convert_value(attr(*args, **kwargs))
             return wrapper
         return attr
 
     def __repr__(self):
-        return '<WebDriver Instance, %s>' % self.driver.name
+        return '<WebDriverDecorator Instance, %s>' % self.driver.name
