@@ -22,7 +22,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 run_slow_tests = '--all' in sys.argv
 browser_name = None
-
+browser = None
 
 def get_browser_name():
     return browser_name
@@ -40,11 +40,14 @@ else:
 
 class WebDriverPlusTests(unittest.TestCase):
     extra_webdriver_kwargs = {}
-    browser = WebDriver(**extra_webdriver_kwargs)
 
     def setUp(self):
+        global browser
         browser_name = get_browser_name()
-        self.driver = webdriverplus.WebDriver(browser_name or self.browser, reuse_browser=True,
+        if not browser_name and not browser:
+            browser = WebDriver(**self.extra_webdriver_kwargs)
+
+        self.driver = webdriverplus.WebDriver(browser_name or browser, reuse_browser=True,
                                               **self.extra_webdriver_kwargs)
 
     def tearDown(self):
